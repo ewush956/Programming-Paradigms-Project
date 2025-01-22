@@ -26,8 +26,8 @@ The system will accept two CSV files:
 1. **Courses.csv:**  
    | Course Code | Name   | Credits | Prerequisites | Availability  |  
    |-------------|--------|---------|---------------|---------------|  
-   | CS101       | Intro  | 3       | None          | Fall, Spring  |  
-   | CS201       | Algo   | 3       | CS101         | Spring        |  
+   | COMP 1701        | Introduction to Programming  | 3       | None          | Fall, Spring  |  
+   | COMP 1633       | Introduction to Computer Science II   | 3       | COMP 1701         | Fall, Winter        |  
 
 2. **Requirements.csv:**  
    | Requirement Type   | Credits | Details        |  
@@ -52,3 +52,6 @@ A valid schedule must meet the following:
 - Imperative Language: Python
 - Declarative Language: Haskell
 
+## Recursive Backtracking
+Our solution will represent courses on a tree or graph like structure, with edges representing 
+the relationship between prerequisites. The program will have to backtrack if a courses is selected if the prerequisite is not met.  
