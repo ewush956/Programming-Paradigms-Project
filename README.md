@@ -74,12 +74,6 @@ Remaining Energy: 4.5
 * Communication: Discord  
 * Conflict Resolution: Nerf Guns
 
-# 
-
-# 
-
-# 
-
 # Search Space Exploration
 
 The search space consists of all possible permutations of node traversal paths, subject to energy constraints. To navigate this search space effectively:
