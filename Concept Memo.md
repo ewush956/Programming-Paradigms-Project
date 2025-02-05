@@ -4,7 +4,7 @@
 
 # Executive Summary
 
-	This project presents an approach to solving a variant of the Traveling Salesman Problem (TSP) by adapting principles inspired by the slime mold algorithms food/energy-based system. The primary goal is to enable a resource-constrained agent, the "Tendril Agent," to traverse all nodes, each only once, in a Cartesian space And find the first viable solution. Unlike traditional TSP, this approach does not require returning to the starting point, and decisions are made based on current energy constraints when making movements rather than solely on the distance to an additional node. 
+This project presents an approach to solving a variant of the Traveling Salesman Problem (TSP) by adapting principles inspired by the slime mold algorithms food/energy-based system. The primary goal is to enable a resource-constrained agent, the "Tendril Agent," to traverse all nodes, each only once, in a Cartesian space And find the first viable solution. Unlike traditional TSP, this approach does not require returning to the starting point, and decisions are made based on current energy constraints when making movements rather than solely on the distance to an additional node. 
 
 The main purpose:  **Find all the food while staying alive (maintain a non negative energy value)**
 
