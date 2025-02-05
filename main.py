@@ -1,4 +1,5 @@
 from Path import Path
+from FoodItem import FoodItem
 
 def main():
     path = Path()
@@ -7,7 +8,7 @@ def main():
 
     for fooditem in path.food_items:
         print(f"\n{fooditem}\n")
-
+    
     print("Main")
 
 

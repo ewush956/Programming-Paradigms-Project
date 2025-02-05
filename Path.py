@@ -4,6 +4,7 @@ import csv
 class Path():
     def __init__(self):
         self.food_items = []
+        self.visited = []
         
     def read_csv_data(self, filename : str):
         with open(filename, 'r') as file:
