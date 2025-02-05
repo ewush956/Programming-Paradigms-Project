@@ -143,8 +143,6 @@ The search space consists of all possible permutations of node traversal paths, 
 
 We plan on taking an incremental testing approach, preferably using unit tests. For example, testing if individual nodes can make connections that look *reasonably* accurate. This helps to ensure that current builds in the codespace work correctly before moving forward. We also plan to use debugging functions so the visited locations are evident.
 
-**TODO: ADD TEST CASE HERE**
-
 # 
 
 # Time, Skill, & Patience Permitting Features
