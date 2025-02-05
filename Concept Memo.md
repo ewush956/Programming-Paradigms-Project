@@ -4,7 +4,7 @@
 
 # Executive Summary
 
-	This project presents an approach to solving a variant of the Traveling Salesman Problem (TSP) by adapting principles inspired by the slime mold algorithms food/energy-based system. The primary goal is to enable a resource-constrained agent, the "Tendril Agent," to traverse all nodes, each only once, in a Cartesian space And find the first viable solution. Unlike traditional TSP, this approach does not require returning to the starting point, and decisions are made based on current energy constraints when making movements rather than solely on the distance to an additional node. 
+This project presents an approach to solving a variant of the Traveling Salesman Problem (TSP) by adapting principles inspired by the slime mold algorithms food/energy-based system. The primary goal is to enable a resource-constrained agent, the "Tendril Agent," to traverse all nodes, each only once, in a Cartesian space And find the first viable solution. Unlike traditional TSP, this approach does not require returning to the starting point, and decisions are made based on current energy constraints when making movements rather than solely on the distance to an additional node. 
 
 The main purpose:  **Find all the food while staying alive (maintain a non negative energy value)**
 
@@ -35,46 +35,6 @@ A problem instance consists of:
    
 
 The solution to the problem is a traversal path that allows the Tendril Agent to visit all nodes in the plane exactly once while ensuring that it does not run out of energy at any point during the traversal. The agent's remaining energy after visiting all nodes should be maximized.
-
-## 
-
-## Calculations for Energy:
-
-| Example (uphill)  | Example (downhill) |
-| ----- | ----- |
-|  For Slope Gradient Descent → (\> 1 means going UP) (\< 1 means going DOWN) (== 1 no Gradient) |  |
-| Initial \= (2, 3, 5\) → Destination \= (5, 7, 9\) **Distance\_3D  $\\sqrt{\\left( 5-2\\right)^{2} \+ \\left( 7-3\\right)^{2} \+ \\left( 9-5\\right)^{2}}$** $\\sqrt{9 \+ 16 \+ 16}$ $\\approx  6.4$ **Distance\_2D**  $\\sqrt{ \\left( 5-2\\right)^{2} \+ \\left( 7-3\\right)^{2} }$ $=\\sqrt{25}$ $= 5$ **Slope\_Gradient\_Scaler**  $ 1 \+ \\biggl( \\frac{z\_{2} \- z\_{1}} {\\text{Distance}\_{2D}} \\biggr) $ $=1 \+ \\biggl( \\frac{9-5}{5} \\biggr) $ $ \= 1 \+ 0.8 $ $ \= 1.8$ **Energy\_Cost** $ \= \\text{Distance\\\_3D}\\times\\text{Slope\\\_Gradient\\\_Scaler} $ $ \\approx 6.4 \\cdot 1.8 $ $ \\approx 11.52 $ | Initial \= (5, 7, 9\) → Destination \= (2, 3, 5\) **Distance\_3D $\\sqrt{\\left( 2-5\\right)^{2} \+ \\left( 3-7\\right)^{2} \+ \\left( 5-9\\right)^{2}}$** $\\sqrt{ 9 \+ 16 \+ 16 }$ $\\approx 6.4$ **Distance\_2D**  $\\sqrt{\\left( 2-5\\right)^{2} \+ \\left( 3-7\\right)^{2}}$ $=\\sqrt{ 25 }$ $= 5 $**Slope\_Gradient\_Scaler**  $ 1 \+ \\biggl( \\frac{z\_{2} \- z\_{1}} {\\text{Distance}\_{2D}} \\biggr) $ $=1 \+ \\biggl( \\frac{5-9}{5} \\biggr) $ $ \= 1 \+ (-0.8) $  $= 0.2$      	  **Energy\_Cost $ \= \\text{Distance\\\_3D}\\times\\text{Slope\\\_Gradient\\\_Scaler} $** $ \\approx 6.4 \\cdot 0.2 $ $ \\approx 1.28 $ \*\*\* You’ll notice a difference between the previous slope gradient scalar and this one \*\*\*  |
-
-\*\*\* Downhill vs Uphill has a potentially drastic change to the energy cost result depending on the slope intensity \*\*\*
-
-```py
-
-#food.energy is the current nodes constant energy value.
-def solve(G: Problem / graph-like structure, food_eaten: Int) -> bool
-	if (food_eaten == G.food_count)
-		return true
-	for (food in G)
-		if (G.current_energy > (either 0 or difference level)???)
-			if (food.energy + G.current_energy < G.cap) 
-				G.current_energy += food.energy 
-			distance = get_euclidean_distance(food, G.last_visited)
-			distance += food.z_component #can be negative
-G.energy -= distance
-last = G.last_visited
-G.update_last_visited(food) #set food as last visited for G
-food.visited = true
-val++
- 	if (solve(G, val))
-		return true
-			#start undo-ing
-			food.visited = false
-			val--
-			G.energy += distance
-			G.update_last_visited(last)
-	return false
-```
-
-# 
 
 # Input Format
 
