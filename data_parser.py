@@ -35,4 +35,44 @@ for i in range(len(x_coords)):
             fontsize=12, color='black')
 
 ax.plot(x_coords, y_coords, z_coords, marker='o')
+
+# Disable built-in rotation
+ax.mouse_init(rotate_btn=None)
+
+# Variables to store starting values
+start_event = None
+start_azim = None
+start_elev = None
+
+def on_press(event):
+    global start_event, start_azim, start_elev
+    if event.inaxes == ax:
+        start_event = event
+        start_azim = ax.azim
+        start_elev = ax.elev
+
+def on_motion(event):
+    global start_event, start_azim, start_elev
+    if start_event is None or event.inaxes != ax:
+        return
+    dx = event.x - start_event.x
+    dy = event.y - start_event.y
+    # Only update the dominant direction:
+    if abs(dx) > abs(dy):
+        new_azim = start_azim - dx * 0.5
+        new_elev = start_elev
+    else:
+        new_elev = start_elev - dy * 0.5
+        new_azim = start_azim
+    ax.view_init(elev=new_elev, azim=new_azim)
+    fig.canvas.draw_idle()
+
+def on_release(event):
+    global start_event
+    start_event = None
+
+fig.canvas.mpl_connect('button_press_event', on_press)
+fig.canvas.mpl_connect('motion_notify_event', on_motion)
+fig.canvas.mpl_connect('button_release_event', on_release)
+
 plt.show()
