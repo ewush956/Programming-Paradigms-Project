@@ -27,9 +27,9 @@ The Agent's behavior can be categorized into three phases:
 A problem instance consists of:
 
 1. A set of 𝑁 nodes distributed on a Cartesian plane, where each node is defined by:  
-* A unique identifier (node number).  
-* Coordinates (𝑥,𝑦) as decimal-point numbers.  
-* An energy gain value (positive number).  
+	* A unique identifier (node number).  
+	* Coordinates (𝑥,𝑦) as decimal-point numbers.  
+	* An energy gain value (positive number).  
 2. A starting node where the Tendril Agent begins with a specified initial energy reserve.  
 3. A list that contains all unvisited nodes. Backtracking appends nodes back to this list.  
    
