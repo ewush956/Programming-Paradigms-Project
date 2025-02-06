@@ -19,7 +19,7 @@
 * Organize imports as follows, with standard, third-party, and local module imports separated:
 
 ```py
-import os
+import os
 import sys
 
 import numpy as np
@@ -48,7 +48,7 @@ from mymodule import myfunction
 
 ```py
 def add_numbers(a: int, b: int) -> int:
-return a + b
+    return a + b
 ```
 
 * Keep functions focused and modular to support reusability and testability.
@@ -60,7 +60,7 @@ return a + b
 ```py
 def square(num: int) -> int:
     """Returns the square of a number."""
-return num * num
+    return num * num
 ```
 
 * Use inline comments judiciously and only to clarify complex logic.  
@@ -75,7 +75,7 @@ return num * num
 try:
     value = int(input("Enter a number: "))
 except ValueError:
-print("Invalid input! Please enter a valid number.")
+    print("Invalid input! Please enter a valid number.")
 ```
 
 * Avoid broad exception handling (`except Exception:`) unless absolutely necessary.
@@ -88,8 +88,8 @@ print("Invalid input! Please enter a valid number.")
 * Ensure sufficient test coverage across all modules.
 
 ```py
-def test_square():
-assert square(3) == 9
+def test_square():
+    assert square(3) == 9
 ```
 
 # 8\. Version Control
