@@ -37,39 +37,30 @@ A problem instance consists of:
 The solution to the problem is a traversal path that allows the Tendril Agent to visit all nodes in the plane exactly once while ensuring that it does not run out of energy at any point during the traversal. The agent's remaining energy after visiting all nodes should be maximized.
 
 ```py
-#food.energy is the current nodes constant energy value.
-def solve(G: Problem / graph-like structure, food_eaten: Int) -> bool
-    if (food_eaten == G.food_count)
-        return true
-    for (food in G)
-        if (G.current_energy > (either 0 or difference level)???)
-            if (food.energy + G.current_energy < G.cap) 
-                G.current_energy += food.energy 
-            distance = get_euclidean_distance(food, G.last_visited)
-            distance += food.z_component #can be negative
-G.energy -= distance
-last = G.last_visited
-G.update_last_visited(food) #set food as last visited for G
-food.visited = true
-val++
-     if (solve(G, val))
+# food.energy is the current nodes constant energy value.
+def solve(G: Problem / graph-like structure, food_eaten: Int) -> bool:
+	if (food_eaten == G.food_count)
+        	return true
+    	for (food in G)
+        	if (G.current_energy > (either 0 or difference level)???)
+            		if (food.energy + G.current_energy < G.cap): 
+                		G.current_energy += food.energy 
+		distance = get_euclidean_distance(food, G.last_visited)
+            	distance += food.z_component #can be negative
+	G.energy -= distance
+	last = G.last_visited
+	G.update_last_visited(food) #set food as last visited for G
+	food.visited = true
+	val++
+
+     	if (solve(G, val))
         return true
             #start undo-ing
             food.visited = false
             val--
             G.energy += distance
             G.update_last_visited(last)
-    return false
-
-class Path(self)
-    __init__
-        neighies[All other nodes - starting node]
-
-        #each recursive step will add the current node so its in order
-        visited[starting node]
-optimal_solution = new Path
-check_optimal_solution()
-    #compare self with self.optimal_solution
+	return false
 ```
 
 
