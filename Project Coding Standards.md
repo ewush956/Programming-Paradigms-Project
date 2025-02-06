@@ -58,7 +58,7 @@ def add_numbers(a: int, b: int) -> int:
 * Employ triple double-quoted (`"""`) docstrings for modules, classes, and functions:
 
 ```py
-def square(num: int) -> int:
+def square(num: int) -> int:
     """Returns the square of a number."""
     return num * num
 ```
