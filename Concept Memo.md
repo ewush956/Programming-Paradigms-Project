@@ -70,11 +70,11 @@ The input is provided either as a CSV file in the following format (Hard-coded v
 
 | node\_id | x | y | z | node\_energy |
 | :---: | :---: | :---: | :---: | :---: |
-| 0 | 0 | 0 | 0 | (Some Pos Number) |
-| 1 | 2 | 3 | 2 | (Some Pos Number) |
-| 2 | 2 | 2 | 2 | (Some Pos Number) |
-| 3 | 1 | 0 | 1 | (Some Pos Number) |
-| 4 | \-1 | 1 | \-0.5 | (Some Pos Number) |
+| 0 | 0 | 0 | 0 | (Some Positive Number) |
+| 1 | 2 | 3 | 2 | (Some Positive Number) |
+| 2 | 2 | 2 | 2 | (Some Positive Number) |
+| 3 | 1 | 0 | 1 | (Some Positive Number) |
+| 4 | \-1 | 1 | \-0.5 | (Some Positive Number) |
 | … | … | … |  | … |
 
 Which would represent this graph, where the z-axis simulates different gradients.  
