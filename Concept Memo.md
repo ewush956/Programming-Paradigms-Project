@@ -45,21 +45,21 @@ def solve(G: Problem / graph-like structure, food_eaten: Int) -> bool:
         	if (G.current_energy > (either 0 or difference level)???)
             		if (food.energy + G.current_energy < G.cap): 
                 		G.current_energy += food.energy 
-		distance = get_euclidean_distance(food, G.last_visited)
-            	distance += food.z_component #can be negative
-	G.energy -= distance
-	last = G.last_visited
-	G.update_last_visited(food) #set food as last visited for G
-	food.visited = true
-	val++
-
-     	if (solve(G, val))
-        return true
-            #start undo-ing
-            food.visited = false
-            val--
-            G.energy += distance
-            G.update_last_visited(last)
+			distance = get_euclidean_distance(food, G.last_visited)
+	            	distance += food.z_component #can be negative
+			G.energy -= distance
+			last = G.last_visited
+			G.update_last_visited(food) #set food as last visited for G
+			food.visited = true
+			val++
+		
+		     	if (solve(G, val))
+				return true
+			#start undo-ing
+			food.visited = false
+			val--
+			G.energy += distance
+			G.update_last_visited(last)
 	return false
 ```
 
