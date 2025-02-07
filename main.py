@@ -2,7 +2,7 @@ from Path import Path
 from FoodItem import FoodItem
 import math
 
-def euclidean_distance(x1, y1, x2, y2):
+def euclidean_distance_r2(x1, y1, x2, y2):
     return math.sqrt((x2 - x1)**2 + (y2 - y1)**2)
 
 def get_scalar(dist_r2, z1, z2):
@@ -16,6 +16,7 @@ def get_energy_cost(dist_r3, scalar):
 
 def solve(path: Path) -> bool:
     pass
+
 def main():
     path = Path()
 
