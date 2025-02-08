@@ -4,31 +4,36 @@ from food_item import FoodItem
 import math
 
 def solve(graph : Graph) -> bool:
+    if(len(graph.remaining_food) == 0):
+        graph.update_optimal()
+        return False
+    else:
+        for food_id in graph.remaining_food:
+            graph.current_path.current_food = food_id
+    
     """
-    optimalP = null
-
-    def solve(p: Problem):
-        if p is solved:
-            optimalP = get_optimal(optimalP, p)   
-            set p to not solved
-        for each move in possible moves for p:
-            apply move to p to get p'
-            solve(p')
-            undo move  # backtrack
-        return optimalP
-
+    if p is solved:
+        optimalP = get_optimal(optimalP, p)   
+        set p to not solved
+    for each move in possible moves for p:
+        apply move to p to get p'
+        solve(p')
+        undo move  # backtrack
+    return optimalP
     """
     pass
 
 def main():
     graph = Graph()
-    graph.read_csv_data("random_coordinates_energy.csv")
-    graph.initialize_remaining_food()
-    graph.update_remaining_food(0)
+    graph.remaining_food = [1,2,3,4]
 
-    for food in graph.food_items:
-        print(food.food_id)
-    print(graph.remaining_food)
+    graph.current_path.path_list = [1,2,3]
+    graph.optimal_path.path_list = []
+
+    graph.current_path.net_energy_gain = 0
+    graph.optimal_path.net_energy_gain = 0
+
+    solve(graph)
 
 if __name__ == "__main__":
     main()
