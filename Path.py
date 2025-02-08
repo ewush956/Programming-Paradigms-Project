@@ -18,5 +18,3 @@ class Path():
     def add_to_path(self, id : int):
         self.path_list.append(id)
     
-    def update_remaining_food(self):
-        pass

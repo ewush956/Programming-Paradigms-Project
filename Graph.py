@@ -32,4 +32,7 @@ class Graph():
     def update_optimal(self):
         if(self.current_path.net_energy_gain > self.optimal_path.net_energy_gain):
             self.optimal_path = self.current_path[:]
+
+    def update_remaining_food(self):
+        pass
     
