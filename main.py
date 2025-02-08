@@ -23,9 +23,12 @@ def solve(graph : Graph) -> bool:
 def main():
     graph = Graph()
     graph.read_csv_data("random_coordinates_energy.csv")
+    graph.initialize_remaining_food()
+    graph.update_remaining_food(0)
 
     for food in graph.food_items:
         print(food.food_id)
+    print(graph.remaining_food)
 
 if __name__ == "__main__":
     main()

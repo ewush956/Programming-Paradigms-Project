@@ -10,7 +10,7 @@ class Path():
         ''' The total net energy gain so far in the run '''
     
     def set_starting_position(self, starting_food : FoodItem):
-        self.path_list.append(starting_food.node_id)
+        self.path_list.append(starting_food.food_id)
     
     def set_current_food_item(self, current_food : FoodItem):
         self.current_food = current_food

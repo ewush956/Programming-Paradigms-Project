@@ -33,6 +33,11 @@ class Graph():
         if(self.current_path.net_energy_gain > self.optimal_path.net_energy_gain):
             self.optimal_path = self.current_path[:]
 
-    def update_remaining_food(self):
-        pass
-    
+    def initialize_remaining_food(self):
+        for food in self.food_items:
+            self.remaining_food.append(food.food_id)
+
+    def update_remaining_food(self, id : int):
+        if (id < 0):
+            self.remaining_food.add(self.food_items[id].food_id)
+        self.remaining_food.remove(self.food_items[id].food_id)
