@@ -1,32 +1,34 @@
-from Path import Path
-from FoodItem import FoodItem
+from graph import Graph
+from path import Path
+from food_item import FoodItem
 import math
 
-def euclidean_distance_r2(x1, y1, x2, y2):
-    return math.sqrt((x2 - x1)**2 + (y2 - y1)**2)
+def solve(graph : Graph) -> bool:
+    """
+    optimalP = null
 
-def get_scalar(dist_r2, z1, z2):
-    return (1 + ((z2 - z1) / dist_r2))
+    def solve(p: Problem):
+        if p is solved:
+            optimalP = get_optimal(optimalP, p)   
+            set p to not solved
+        for each move in possible moves for p:
+            apply move to p to get p'
+            solve(p')
+            undo move  # backtrack
+        return optimalP
 
-def euclidean_distance_r3(x1, y1, z1, x2, y2, z2):
-    return math.sqrt((x2 - x1)**2 + (y2 - y1)**2 + (z2 - z1)**2)
-
-def get_energy_cost(dist_r3, scalar):
-    return dist_r3 * scalar
-
-def solve(path: Path) -> bool:
+    """
     pass
 
 def main():
-    path = Path()
+    graph = Graph()
+    graph.read_csv_data("random_coordinates_energy.csv")
 
-    path.read_csv_data(filename='./random_coordinates_energy.csv')
-
-    for fooditem in path.food_items:
-        print(f"\n{fooditem}\n")
-    
-    print("Main")
-
+    for food in graph.food_items:
+        print(food.food_id)
 
 if __name__ == "__main__":
     main()
+
+
+

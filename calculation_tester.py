@@ -1,5 +1,5 @@
-from Path import Path
-from FoodItem import FoodItem
+from path import Path
+from food_item import FoodItem
 from math import sqrt
 
 def euclidean_distance_r2(x1 : int, y1 : int, x2 : int, y2 : int) -> float:

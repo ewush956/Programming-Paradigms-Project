@@ -8,7 +8,6 @@ filename = "random_coordinates_energy"
 def generate_random_points(num_points):
     points = []
     for i in range(num_points):
-        node_number = i
         x = round(random.uniform(-5, 5), 2)
         y = round(random.uniform(-5, 5), 2)
         z = round(random.uniform(-5, 5), 2)

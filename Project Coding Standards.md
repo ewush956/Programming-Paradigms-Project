@@ -40,7 +40,7 @@ from mymodule import myfunction
 | Functions | lowercase\_with\_underscores | `def calculate_total():` |
 | Classes | CamelCase | `class DataProcessor:` |
 | Private Variables | \_single\_leading\_underscore | `_temp_value = 42` |
-| Module Names | lowercase | `mymodule.py` |
+| Module Names | lowercase snakecase | `my_module.py` |
 
 # 4\. Functions and Methods
 

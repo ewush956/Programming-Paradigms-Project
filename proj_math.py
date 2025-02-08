@@ -1,0 +1,13 @@
+from math import sqrt
+
+def euclidean_distance_r2(x1, y1, x2, y2):
+    return sqrt((x2 - x1)**2 + (y2 - y1)**2)
+
+def get_scalar(dist_r2, z1, z2):
+    return (1 + ((z2 - z1) / dist_r2))
+
+def euclidean_distance_r3(x1, y1, z1, x2, y2, z2):
+    return sqrt((x2 - x1)**2 + (y2 - y1)**2 + (z2 - z1)**2)
+
+def get_energy_cost(dist_r3, scalar):
+    return dist_r3 * scalar
