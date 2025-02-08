@@ -111,10 +111,12 @@ The search space consists of all possible permutations of node traversal paths, 
 * At each step, the agent considers all unvisited nodes reachable with its current energy reserve. Using a method of memoization, we will dynamically 
 update the remaining available nodes so the remaining search space decreases
 in size the further down the solution gets.
-* A heuristic approach prioritizes nodes based on traversal cost, given by the Euclidean distance, and available energy of the agent.  
-  **Backtracking**:  
+* A heuristic approach prioritizes nodes based on traversal cost, given by the Euclidean distance, and available energy of the agent. 
+
+**Backtracking**:  
 * If the agent cannot proceed to any feasible node, it backtracks to previously visited nodes and explores alternative paths.  
-  **Energy Constraints**:  
+
+**Energy Constraints**:  
 * Nodes are excluded from consideration if the agent's remaining energy is insufficient to reach them.
 
 # Testing Approach
