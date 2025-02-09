@@ -1,5 +1,4 @@
-from path import Path
-from food_item import FoodItem
+from Food_Item import FoodItem
 from math import sqrt
 
 def euclidean_distance(p1 : tuple, p2 : tuple):

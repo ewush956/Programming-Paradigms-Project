@@ -1,5 +1,5 @@
-from food_item import FoodItem
-from path import Path
+from Food_Item import FoodItem
+from Path import Path
 from math import sqrt
 import csv
 

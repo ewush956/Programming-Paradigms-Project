@@ -1,4 +1,4 @@
-from food_item import FoodItem
+from Food_Item import FoodItem
 from math import sqrt
 
 def euclidean_distance_r2(x1, y1, x2, y2):

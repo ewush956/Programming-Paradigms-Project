@@ -1,4 +1,4 @@
-from food_item import FoodItem
+from Food_Item import FoodItem
 
 class Path():
     def __init__(self):
