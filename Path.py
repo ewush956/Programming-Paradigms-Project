@@ -20,4 +20,11 @@ class Path():
     
     def update_net(self, energy_gain : int):
         self.net_energy_gain += energy_gain
+
+    def __str__(self):
+        final_string = ""
+        for node in self.path_list:
+            final_string = final_string + " -> " + str(node.food_id)
+        return final_string
+        
     
