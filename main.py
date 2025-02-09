@@ -4,6 +4,7 @@ from food_item import FoodItem
 from calculation_tester import get_total_cost
 
 def solve(graph : Graph, node : FoodItem) -> None:
+    
     if(len(graph.remaining_food) == 1):
         graph.current_path.path_list.append(node)
         graph.update_optimal()
@@ -11,10 +12,10 @@ def solve(graph : Graph, node : FoodItem) -> None:
     
     current_node = node
     graph.remaining_food.remove(current_node)
-    graph.current_path.add_to_path(current_node)
+    graph.current_path.path_list.append(current_node)
 
     for food in graph.remaining_food:
-  
+        print(graph.current_path)
         #curr_food = graph.remaining_food[food.food_id]
         #curr_food = graph.remaining_food[food[0]]
         #next_food = graph.remaining_food[food.food_id + 1]
@@ -28,14 +29,11 @@ def solve(graph : Graph, node : FoodItem) -> None:
             curr_path.update_net(net)
             solve(graph, food)
             curr_path.update_net(-net)
-            graph.remaining_food.add(current_node,current_node.food_id)
-        
-
-
-            
-
-
-    
+            graph.remaining_food.insert(current_node.food_id, current_node)
+            graph.current_path.path_list.remove(current_node)
+    #graph.remaining_food.insert(current_node.food_id, current_node)
+    #graph.current_path.path_list.remove(current_node)
+    return
     """
     if p is solved:
         optimalP = get_optimal(optimalP, p)   
@@ -46,7 +44,6 @@ def solve(graph : Graph, node : FoodItem) -> None:
         undo move  # backtrack
     return optimalP
     """
-    pass
 
 def main():
     graph = Graph()
