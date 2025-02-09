@@ -16,7 +16,7 @@ class Graph():
     def __init__(self):
         self.optimal_path = Path()
         self.current_path = Path()
-        self.remaining_food : FoodItem = []
+        self.remaining_food : int = []
         self.all_food_nodes : FoodItem = []
 
     def read_csv_data(self, filename : str):
@@ -37,4 +37,4 @@ class Graph():
 
     def initialize_remaining_food(self):
         for food in self.all_food_nodes:
-            self.remaining_food.append(food)
+            self.remaining_food.append(food.food_id)
