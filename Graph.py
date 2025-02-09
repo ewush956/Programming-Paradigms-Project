@@ -16,15 +16,15 @@ class Graph():
     def __init__(self):
         self.optimal_path = Path()
         self.current_path = Path()
-        self.remaining_food : int = []
-        self.food_items = []
+        self.remaining_food : FoodItem = []
+        self.all_food_nodes : FoodItem = []
 
     def read_csv_data(self, filename : str):
         with open(filename, 'r') as file:
             csv_reader = csv.reader(file)
             next(csv_reader)  # Skip header row
             for row in csv_reader:
-                self.food_items.append(
+                self.all_food_nodes.append(
                     FoodItem(int(row[0]),
                     float(row[1]),
                     float(row[2]),
@@ -36,17 +36,5 @@ class Graph():
             self.optimal_path.path_list = self.current_path.path_list[:]
 
     def initialize_remaining_food(self):
-        for food in self.food_items:
-            self.remaining_food.append(food.food_id)
-
-    def euclidean_distance_r2(self, x1, y1, x2, y2):
-        return sqrt((x2 - x1)**2 + (y2 - y1)**2)
-
-    def get_scalar(self, dist_r2, z1, z2):
-        return (1 + ((z2 - z1) / dist_r2))
-
-    def euclidean_distance_r3(self, x1, y1, z1, x2, y2, z2):
-        return sqrt((x2 - x1)**2 + (y2 - y1)**2 + (z2 - z1)**2)
-
-    def get_energy_cost(self, dist_r3, scalar):
-        return dist_r3 * scalar
+        for food in self.all_food_nodes:
+            self.remaining_food.append(food)

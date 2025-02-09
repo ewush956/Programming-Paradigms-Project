@@ -11,19 +11,14 @@ def get_scalar(dist_r2 : float, z1 : int, z2 : int) -> float:
 def get_energy_cost(dist_r3 : float, scalar : float):
     return dist_r3 * scalar
 
-def valid_move(net_energy : float, node1 : FoodItem, node2 : FoodItem):
-    r2 = euclidean_distance((node1.x,node1.y), (node2.x, node2.y))
-    r3 = euclidean_distance((node1.x, node1.y, node1.z), (node2.x, node2.y, node2.z))
-    scalar = get_scalar(r2, z1=node1.z, z2=node2.z)
-    print(get_energy_cost(r3, scalar))
-    return (net_energy >= get_energy_cost(r3, scalar))
+def valid_move(net_energy : float, starting_node : FoodItem, target_node : FoodItem):
+    return (net_energy >= get_total_cost(starting_node, target_node))
 
-def calculate_all(node1 : FoodItem, node2 : FoodItem):
-    dist_r2 = euclidean_distance((node1.x, node1.y), (node2.x, node2.y))
-    scalar = get_scalar(dist_r2, node1.z, node2.z)
-    dist_r3 = euclidean_distance((node1.x, node1.y, node1.z), (node2.x, node2.y, node2.z))
-    energy_cost = get_energy_cost(dist_r3, scalar)
-    print(f"dist_r2: {dist_r2}\nscalar: {scalar}\ndist_r3: {dist_r3}\nenergy_cost: {energy_cost}\n")
+def get_total_cost(starting_node : FoodItem, target_node : FoodItem) -> int:
+    r2 = euclidean_distance((starting_node.x,starting_node.y), (target_node.x, target_node.y))
+    r3 = euclidean_distance((starting_node.x, starting_node.y, starting_node.z), (target_node.x, target_node.y, target_node.z))
+    scalar = get_scalar(r2, z1=starting_node.z, z2=target_node.z)
+    return get_energy_cost(r3, scalar)
 
 def main():
     food_item_0 = FoodItem(food_id=0, x=0, y=0, z=0, energy=4)
