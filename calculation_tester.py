@@ -5,6 +5,8 @@ def euclidean_distance(p1 : tuple, p2 : tuple):
     return sqrt(sum((a - b)**2 for a, b in zip(p1, p2)))
 
 def get_scalar(dist_r2 : float, z1 : int, z2 : int) -> float:
+    if dist_r2 == 0:
+        return 1
     return (1 + ((z2 - z1) / dist_r2))
 
 def get_energy_cost(dist_r3 : float, scalar : float):

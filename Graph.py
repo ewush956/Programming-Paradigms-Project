@@ -34,6 +34,7 @@ class Graph():
     def update_optimal(self):
         if(self.current_path.net_energy_gain >= self.optimal_path.net_energy_gain):
             self.optimal_path.path_list = self.current_path.path_list[:]
+            self.optimal_path.net_energy_gain = self.current_path.net_energy_gain 
 
     def initialize_remaining_food(self):
         for food in self.all_food_nodes:
