@@ -7,7 +7,7 @@ import bisect
 def solve(graph : Graph, node : FoodItem) -> None:
     #print(graph.current_path)
     #print(graph.remaining_food)
-    print()
+    #print()
     if(len(graph.remaining_food) == 0):
         graph.update_optimal()
         print(f"Current Optimal: {graph.optimal_path}")
