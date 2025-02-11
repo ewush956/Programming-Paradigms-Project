@@ -8,9 +8,9 @@ filename = "random_coordinates_energy_modded"
 def generate_random_points(num_points):
     points = []
     for i in range(num_points):
-        x = round(random.uniform(-5, 5), 2)
-        y = round(random.uniform(-5, 5), 2)
-        z = round(random.uniform(-5, 5), 2)
+        x = round(random.uniform(0, 20), 2)
+        y = round(random.uniform(0, 20), 2)
+        z = round(random.uniform(0, 20), 2)
         energy = random.randint(1, 10)
         points.append((i, x, y, z, energy))
     return points

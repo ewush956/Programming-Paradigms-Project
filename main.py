@@ -30,6 +30,7 @@ def solve(graph : Graph, node : FoodItem) -> None:
             graph.current_path.net_energy_gain += cost
             graph.current_path.path_list.remove(food)
             bisect.insort(graph.remaining_food, food)
+            #graph.remaining_food.push(food)
         #print_current_path(graph)
 def main():
     graph = Graph()
