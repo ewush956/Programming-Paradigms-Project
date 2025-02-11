@@ -3,7 +3,7 @@ import random
 
 random.seed(42069)
 
-filename = "random_coordinates_energy"
+filename = "random_coordinates_energy_modded"
 
 def generate_random_points(num_points):
     points = []
