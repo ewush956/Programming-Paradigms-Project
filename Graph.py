@@ -30,7 +30,20 @@ class Graph():
                     float(row[2]),
                     float(row[3]),
                     int(row[4])))
-
+    def write_solution_to_csv(self, filename : str):
+        with open(filename, 'w', newline='') as file:
+            csv_writer = csv.writer(file)
+            csv_writer.writerow(['Node Number', 'X', 'Y', 'Z','Energy',])
+            print(f"pathlist {self.optimal_path.path_list}") 
+            for food_item in self.optimal_path.path_list:
+                csv_writer.writerow([
+                    self.all_food_nodes[food_item].food_id,
+                    self.all_food_nodes[food_item].x,
+                    self.all_food_nodes[food_item].y,
+                    self.all_food_nodes[food_item].z,
+                    self.all_food_nodes[food_item].energy
+                ])
+        
     def update_optimal(self):
         if(self.current_path.net_energy_gain >= self.optimal_path.net_energy_gain):
             self.optimal_path.path_list = self.current_path.path_list[:]

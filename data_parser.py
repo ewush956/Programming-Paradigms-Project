@@ -2,7 +2,7 @@ import csv
 import matplotlib.pyplot as plt
 import mpl_toolkits as mpl
 
-filename = "random_coordinates_energy.csv"
+filename = "solution.csv"
 
 node_nums = []
 x_coords = []

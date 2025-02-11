@@ -4,11 +4,13 @@ from copy import deepcopy
 from calculation_tester import get_total_cost
 import bisect
 
-def solve(graph : Graph, node : FoodItem) -> None:
-
+def print_current_path(graph : Graph):
     print(f"Current Path: {graph.current_path}")
     print(f"Net Gain: {graph.current_path.net_energy_gain}")
     print()
+def solve(graph : Graph, node : FoodItem) -> None:
+
+    print_current_path(graph)
     if(len(graph.remaining_food) == 0):
         print(f"Current Optimal: {graph.optimal_path}")
         print(f"Net Gain: {graph.optimal_path.net_energy_gain}")
@@ -30,7 +32,7 @@ def solve(graph : Graph, node : FoodItem) -> None:
             graph.current_path.net_energy_gain += cost
             graph.current_path.path_list.remove(food)
             bisect.insort(graph.remaining_food, food)
-        
+        print_current_path(graph)
 def main():
     graph = Graph()
     graph.read_csv_data("./random_coordinates_energy.csv")
@@ -42,6 +44,7 @@ def main():
     solve(graph, starting_node)
     print(f"optimal: {graph.optimal_path}")
     print(f"net: {graph.optimal_path.net_energy_gain}")
+    graph.write_solution_to_csv("solution.csv")
 
 if __name__ == "__main__":
     main()
