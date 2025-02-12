@@ -19,7 +19,7 @@ class FoodItem:
         return math.sqrt(sum((a - b) ** 2 for a, b in zip(p1, p2)))
 
     @staticmethod
-    def get_scalar(dist_r2: float, z1: float, z2: float) -> float:
+    def get_scalar1(dist_r2: float, z1: float, z2: float) -> float:
         """
         Calculate a scaling factor based on the gradient. Here, dist_r2 is the 
         2D Euclidean distance, and z1 and z2 are the elevations of the two 
@@ -39,6 +39,10 @@ class FoodItem:
         if dist_r2 == 0:
             return 1  # If we are looking at the same location.
         return 1 + ((z2 - z1) / dist_r2)
+
+    @staticmethod
+    def get_scalar2(dist_r2: float, z1: float, z2: float) -> float:
+        return 1 + 0.99 * math.tanh(0.1 * (z2 - z1))
 
     @staticmethod
     def get_energy_cost(dist_r3: float, scalar: float) -> float:
@@ -70,7 +74,7 @@ class FoodItem:
         # Use 3D distance for the overall movement cost
         dist_r3 = self.distance_to_3d(next_node)
         # Get the scalar factor for the gradient adjustment for "uphill" vs "downhill" movement.
-        scalar = FoodItem.get_scalar(dist_r2, self.z, next_node.z)
+        scalar = FoodItem.get_scalar2(dist_r2, self.z, next_node.z)
         # Return the newly scaled 3D movement.
         return FoodItem.get_energy_cost(dist_r3, scalar)
 
@@ -87,9 +91,9 @@ if __name__ == "__main__":
         ]
     
     food_start = food_list[1]
-    food_next = food_list[3]
+    food_next = food_list[4]
 
     print(f"2D Distance: {food_start.distance_to_2d(food_next):.4f}")
     print(f"3D Distance: {food_start.distance_to_3d(food_next):.4f}")
-    print(f"Scaler adjustment: {food_start.get_scalar(food_next.distance_to_2d(food_next), food_start.z, food_next.z):.4f}")
+    print(f"Scaler adjustment: {food_start.get_scalar2(food_next.distance_to_2d(food_next), food_start.z, food_next.z):.4f}")
     print(f"Energy cost: {food_start.energy_cost_to(food_next):.4f}\n")
