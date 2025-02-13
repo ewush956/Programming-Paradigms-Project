@@ -8,6 +8,7 @@ def print_current_path(graph : Graph):
     print(f"Current Path: {graph.current_path}")
     print(f"Net Gain: {graph.current_path.net_energy_gain}")
     print()
+
 def solve(graph : Graph, node : FoodItem) -> None:
 
     #print_current_path(graph)
@@ -32,14 +33,15 @@ def solve(graph : Graph, node : FoodItem) -> None:
             bisect.insort(graph.remaining_food, food)
             #graph.remaining_food.push(food)
         #print_current_path(graph)
+
 def min_starting_node(graph : Graph) -> FoodItem:
     for i in range(0, 1000):
         graph.current_path.net_energy_gain = i
         solve(graph, graph.all_food_nodes[0])
-
         if (graph.optimal_path.path_list):
             print(f"Found min: {i}")
             break
+
 def main():
     graph = Graph()
     graph.read_csv_data("./random_coordinates_energy_modded.csv")
