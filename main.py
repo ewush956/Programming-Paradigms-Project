@@ -69,16 +69,17 @@ def main() -> None:
     
     print("Searching for optimal path...\n")
     start_time = time.time()
-    min_energy_needed = min_starting_energy(graph, max_energy = 48)
+    min_energy_needed = min_starting_energy(graph, max_energy = 33)
     end_time = time.time()
 
     print(f"Done! Finished in {end_time - start_time:.6f} seconds\n")
 
     if(not graph.optimal_path.path_list):
         print("No Optimal Path Found...\n")
-
-    print(f"Minimum Starting Energy Needed To Finish: {min_energy_needed}\n") # Plus one since the min energy starts at 0.
-    print(f"Optimal Path: {graph.optimal_path} --- Finished Optimal Net Energy: {graph.optimal_path.net_energy_gain:.6f}\n")
+    else:
+        print(f"Minimum Starting Energy Needed To Finish: {min_energy_needed}\n") # Plus one since the min energy starts at 0.
+        print(f"Optimal Path: {graph.optimal_path} --- Finished Optimal Net Energy: {graph.optimal_path.net_energy_gain:.6f}\n")
+    
 
     graph.write_solution_to_csv("solution.csv")
 
