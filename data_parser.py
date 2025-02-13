@@ -26,7 +26,7 @@ ax = fig.add_subplot(111,projection='3d')
 
 marker_sizes = [10 * e for e in energy]
 
-ax.scatter(x_coords, y_coords, z_coords, c='purple', marker='x', s=marker_sizes)
+ax.scatter(x_coords, y_coords, z_coords, c='purple', marker='o', s=marker_sizes)
 
 # Label each node with its energy value
 for i in range(len(x_coords)):
