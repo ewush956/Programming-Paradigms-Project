@@ -1,4 +1,3 @@
-
 # This is a Cartesian Plane Node.
 class FoodItem():
     

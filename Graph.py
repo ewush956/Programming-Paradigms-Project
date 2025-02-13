@@ -30,6 +30,7 @@ class Graph():
                     float(row[2]),
                     float(row[3]),
                     int(row[4])))
+    
     def write_solution_to_csv(self, filename : str):
         with open(filename, 'w', newline='') as file:
             csv_writer = csv.writer(file)
@@ -48,9 +49,9 @@ class Graph():
         if(self.current_path.net_energy_gain >= self.optimal_path.net_energy_gain):
             self.optimal_path.path_list = self.current_path.path_list[:]
             self.optimal_path.net_energy_gain = self.current_path.net_energy_gain 
-            print(f"Current Optimal: {self.optimal_path}")
-            print(f"Net Gain: {self.optimal_path.net_energy_gain}")
-            print()
+            # print(f"Current Optimal: {self.optimal_path}")
+            # print(f"Net Gain: {self.optimal_path.net_energy_gain}")
+            # print()
             
 
     def initialize_remaining_food(self):
