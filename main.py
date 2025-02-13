@@ -3,7 +3,34 @@ from Food_Item import FoodItem
 from proj_math import get_total_cost
 import bisect
 import time
+import matplotlib.pyplot as plt
 
+plt.ion()
+
+fig = plt.figure()
+ax = fig.add_subplot(111, projection='3d')
+
+def update_plot(graph, solved : bool):
+    ax.clear()
+    # Plot all nodes (assuming each FoodItem has x, y, z attributes)
+    all_nodes = list(graph.all_food_nodes)
+    x_all = [node.x for node in all_nodes]
+    y_all = [node.y for node in all_nodes]
+    z_all = [node.z for node in all_nodes]
+    ax.scatter(x_all, y_all, z_all, c='purple', alpha=0.5)
+
+    # Plot current path in red
+    if graph.current_path.path_list:
+        path_nodes = [graph.all_food_nodes[node] for node in graph.current_path.path_list]
+        if (solved) :
+            path_nodes = [graph.all_food_nodes[node] for node in graph.optimal_path.path_list]
+        path_x = [node.x for node in path_nodes]
+        path_y = [node.y for node in path_nodes]
+        path_z = [node.z for node in path_nodes]
+        ax.plot(path_x, path_y, path_z, color='purple', marker='o')
+
+    plt.draw()
+    plt.pause(0.06)
 def print_current_path(graph: Graph) -> None:
     """Prints the current path and net energy gain."""
     print(f"Current Path: {graph.current_path}")
@@ -34,6 +61,7 @@ def solve(graph: Graph, node: FoodItem) -> None:
             graph.current_path.net_energy_gain -= cost
             graph.current_path.net_energy_gain += next_node.energy
             
+            update_plot(graph, False)
             # Recursively explore from the new node.
             solve(graph, next_node)
             
@@ -42,6 +70,8 @@ def solve(graph: Graph, node: FoodItem) -> None:
             graph.current_path.net_energy_gain += cost
             graph.current_path.path_list.remove(food)
             bisect.insort(graph.remaining_food, food)
+
+            update_plot(graph, False)
         #print_current_path(graph)
 
 def min_starting_energy(graph: Graph, starting_energy = 1, max_energy: int = 1000) -> int:
@@ -72,8 +102,11 @@ def main() -> None:
     print("Searching for optimal path...\n")
     start_time = time.time()
     #min_energy_needed = min_starting_energy(graph, starting_energy=30, max_energy = 33)
-    min_energy_needed = min_starting_energy(graph, starting_energy=30, max_energy=1000)
+    min_energy_needed = min_starting_energy(graph, starting_energy=61, max_energy=1000)
     end_time = time.time()
+    update_plot(graph, True)
+    plt.ioff()
+    plt.show()
 
     print(f"Done! Finished in {end_time - start_time:.6f} seconds\n")
 
