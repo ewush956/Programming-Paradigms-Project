@@ -35,7 +35,6 @@ class Graph():
         with open(filename, 'w', newline='') as file:
             csv_writer = csv.writer(file)
             csv_writer.writerow(['Node Number', 'X', 'Y', 'Z','Energy',])
-            print(f"pathlist {self.optimal_path.path_list}") 
             for food_item in self.optimal_path.path_list:
                 csv_writer.writerow([
                     self.all_food_nodes[food_item].food_id,
@@ -49,9 +48,7 @@ class Graph():
         if(self.current_path.net_energy_gain >= self.optimal_path.net_energy_gain):
             self.optimal_path.path_list = self.current_path.path_list[:]
             self.optimal_path.net_energy_gain = self.current_path.net_energy_gain 
-            # print(f"Current Optimal: {self.optimal_path}")
-            # print(f"Net Gain: {self.optimal_path.net_energy_gain}")
-            # print()
+            print(f"Current Optimal: {self.optimal_path} --- Interim Net Energy: {self.optimal_path.net_energy_gain}\n")
             
 
     def initialize_remaining_food(self):
