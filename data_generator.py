@@ -18,7 +18,7 @@ def generate_random_points(num_points):
             points.append((i, x, y, z, energy))
     return points
 
-points = generate_random_points(15)
+points = generate_random_points(10)
 
 with open(filename + ".csv", "w", newline="") as csvfile:
     writer = csv.writer(csvfile)

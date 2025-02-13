@@ -49,12 +49,12 @@ def min_starting_energy(graph: Graph, max_energy: int = 1000) -> int:
     Iterates through energy values from 0 to max_energy until a valid path is found.
     Returns the first energy value that results in a valid path.
     """
-    for energy in range(1, max_energy):
+    for energy in range(1, max_energy + 1):
         print(f"Attempting to find optimal route with {energy} starting energy\n")
         graph.current_path.net_energy_gain = energy
         solve(graph, graph.all_food_nodes[0])
         if graph.optimal_path.path_list:
-            return energy + 1
+            return energy
     return max_energy  # Return max_energy if no valid path is found
 
 def main() -> None:
@@ -69,7 +69,7 @@ def main() -> None:
     
     print("Searching for optimal path...\n")
     start_time = time.time()
-    min_energy_needed = min_starting_energy(graph, max_energy = 1000)
+    min_energy_needed = min_starting_energy(graph, max_energy = 48)
     end_time = time.time()
 
     print(f"Done! Finished in {end_time - start_time:.6f} seconds\n")
