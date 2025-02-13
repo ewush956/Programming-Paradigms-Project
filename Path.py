@@ -1,10 +1,11 @@
-from food_item import FoodItem
+from Food_Item import FoodItem
 
 class Path():
     def __init__(self):
         self.current_food_node : FoodItem = FoodItem(None, None, None, None, None) # Starts with an empty FoodItem
         ''' The current food item being used. '''
-        self.path_list : FoodItem = []
+        #self.path_list : FoodItem = []
+        self.path_list : int = []
         ''' A list of integers denoting the food_id of the current path '''
         self.net_energy_gain : int = 0
         ''' The total net energy gain so far in the run '''
@@ -24,7 +25,7 @@ class Path():
     def __str__(self):
         final_string = ""
         for node in self.path_list:
-            final_string = final_string + " -> " + str(node.food_id)
+            final_string = final_string + " -> " + str(node)
         return final_string
         
     

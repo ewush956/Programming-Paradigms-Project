@@ -1,21 +1,24 @@
 import csv
 import random
 
-random.seed(42069)
+random.seed()
 
-filename = "random_coordinates_energy"
+filename = "random_coordinates_energy_modded"
 
 def generate_random_points(num_points):
     points = []
     for i in range(num_points):
-        x = round(random.uniform(-5, 5), 2)
-        y = round(random.uniform(-5, 5), 2)
-        z = round(random.uniform(-5, 5), 2)
-        energy = random.randint(1, 10)
-        points.append((i, x, y, z, energy))
+        x = round(random.uniform(0, 20), 1)
+        y = round(random.uniform(0, 20), 1)
+        z = round(random.uniform(0, 20), 1)
+        energy = random.randint(0, 20)
+        if i == 0:
+            points.append((i, x, y, z, 0))
+        else:
+            points.append((i, x, y, z, energy))
     return points
 
-points = generate_random_points(10)
+points = generate_random_points(6)
 
 with open(filename + ".csv", "w", newline="") as csvfile:
     writer = csv.writer(csvfile)

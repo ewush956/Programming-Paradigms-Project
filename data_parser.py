@@ -2,7 +2,7 @@ import csv
 import matplotlib.pyplot as plt
 import mpl_toolkits as mpl
 
-filename = "random_coordinates_energy.csv"
+filename = "solution.csv"
 
 node_nums = []
 x_coords = []
@@ -32,6 +32,7 @@ ax.scatter(x_coords, y_coords, z_coords, c='purple', marker='x', s=marker_sizes)
 for i in range(len(x_coords)):
     # Adjust fontsize and color as needed
     ax.text(x_coords[i], y_coords[i], z_coords[i], f"{node_nums[i]}", 
+    #ax.text(x_coords[i], y_coords[i], z_coords[i], f"{energy[i]}", 
             fontsize=12, color='black')
 
 ax.plot(x_coords, y_coords, z_coords, marker='o')
