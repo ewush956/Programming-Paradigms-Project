@@ -79,15 +79,14 @@ class FoodItem:
 
 if __name__ == "__main__":
     food_list = [
-        FoodItem(0,3.4,3.2,-4.1,30),
-        FoodItem(1,3.3, 1.9, -2.9, 3),
-        FoodItem(2, 0.7, -1.1, 4.6, 7),
-        FoodItem(3, -1.3, -3.0, 4.2, 8),
-        FoodItem(4,-3.5, -0.1, -2.6, 3)
+        FoodItem(0,3.4,3.2,-4.1,200),
+        FoodItem(1,3.3,1.9,-2.9,3),
+        FoodItem(2,0.7,-1.1,-14.6,7),
+        FoodItem(3,-0.7,3.7,22.8,6)
         ]
     
-    food_start = food_list[1]
-    food_next = food_list[3]
+    food_start = food_list[0]
+    food_next = food_list[2]
 
     print(f"2D Distance: {food_start.distance_to_2d(food_next):.4f}")
     print(f"3D Distance: {food_start.distance_to_3d(food_next):.4f}")
