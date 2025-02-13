@@ -42,7 +42,7 @@ class FoodItem:
 
     @staticmethod
     def get_scalar2(dist_r2: float, z1: float, z2: float) -> float:
-        return 1 + 0.99 * math.tanh(0.1 * (z2 - z1))
+        return 1 + math.tanh(0.1 * (z2 - z1))
 
     @staticmethod
     def get_energy_cost(dist_r3: float, scalar: float) -> float:
@@ -83,12 +83,11 @@ class FoodItem:
 
 if __name__ == "__main__":
     food_list = [
-        FoodItem(0,3.4,3.2,-4.1,200),
-        FoodItem(1,3.3,1.9,-2.9,3),
-        FoodItem(2,0.7,-1.1,-14.6,7),
-        FoodItem(3,-0.7,3.7,22.8,6)
+        FoodItem(0,4.0,4.0,5.0,0),
+        FoodItem(1,0.0,1.0,3.0,6),
+        FoodItem(2,2.0,2.0,3.0,6),
         ]
-    
+
     food_start = food_list[0]
     food_next = food_list[2]
 

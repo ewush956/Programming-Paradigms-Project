@@ -23,6 +23,8 @@ class Path():
         self.net_energy_gain += energy_gain
 
     def __str__(self):
-        return " -> ".join(str(node) for node in self.path_list)
+        return " 🍆💦  ".join(str(node) for node in self.path_list)
+        #return " 👉😎👉  ".join(str(node) for node in self.path_list)
+        #return " 👉 ".join(str(node) for node in self.path_list)
         
     

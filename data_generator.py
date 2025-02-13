@@ -8,17 +8,17 @@ filename = "random_coordinates_energy"
 def generate_random_points(num_points):
     points = []
     for i in range(num_points):
-        x = round(random.uniform(0, 20), 2)
-        y = round(random.uniform(0, 20), 2)
-        z = round(random.uniform(0, 20), 2)
-        energy = random.randint(1, 6)
+        x = round(random.uniform(0, 50), 0)
+        y = round(random.uniform(0, 50), 0)
+        z = round(random.uniform(0, 50), 0)
+        energy = random.randint(1, 50)
         if i == 0:
             points.append((i, x, y, z, 0))
         else:
             points.append((i, x, y, z, energy))
     return points
 
-points = generate_random_points(10)
+points = generate_random_points(14)
 
 with open(filename + ".csv", "w", newline="") as csvfile:
     writer = csv.writer(csvfile)

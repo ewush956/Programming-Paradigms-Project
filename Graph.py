@@ -48,7 +48,7 @@ class Graph():
         if(self.current_path.net_energy_gain >= self.optimal_path.net_energy_gain):
             self.optimal_path.path_list = self.current_path.path_list[:]
             self.optimal_path.net_energy_gain = self.current_path.net_energy_gain 
-            print(f"Current Optimal: {self.optimal_path} --- Interim Net Energy: {self.optimal_path.net_energy_gain:.6f}\n")
+            print(f"Current Optimal: {self.optimal_path} \nInterim Net Energy: {self.optimal_path.net_energy_gain:.6f}\n")
             
 
     def initialize_remaining_food(self):

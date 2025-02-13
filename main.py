@@ -7,7 +7,7 @@ import time
 def print_current_path(graph: Graph) -> None:
     """Prints the current path and net energy gain."""
     print(f"Current Path: {graph.current_path}")
-    print(f"Net Gain: {graph.current_path.net_energy_gain}\n")
+    #print(f"Net Gain: {graph.current_path.net_energy_gain}\n")
 
 def solve(graph: Graph, node: FoodItem) -> None:
     """
@@ -17,6 +17,7 @@ def solve(graph: Graph, node: FoodItem) -> None:
     Otherwise, for each food in the remaining list, if there is enough energy to reach it,
     the algorithm moves forward and then backtracks to explore other options.
     """
+    #print_current_path(graph)
     if not graph.remaining_food:
         graph.update_optimal()
         return
@@ -41,15 +42,16 @@ def solve(graph: Graph, node: FoodItem) -> None:
             graph.current_path.net_energy_gain += cost
             graph.current_path.path_list.remove(food)
             bisect.insort(graph.remaining_food, food)
+        #print_current_path(graph)
 
-def min_starting_energy(graph: Graph, max_energy: int = 1000) -> int:
+def min_starting_energy(graph: Graph, starting_energy = 1, max_energy: int = 1000) -> int:
     """
     Finds the minimum starting energy needed to complete a valid path.
 
     Iterates through energy values from 0 to max_energy until a valid path is found.
     Returns the first energy value that results in a valid path.
     """
-    for energy in range(1, max_energy + 1):
+    for energy in range(starting_energy, max_energy + 1):
         print(f"Attempting to find optimal route with {energy} starting energy\n")
         graph.current_path.net_energy_gain = energy
         solve(graph, graph.all_food_nodes[0])
@@ -69,7 +71,8 @@ def main() -> None:
     
     print("Searching for optimal path...\n")
     start_time = time.time()
-    min_energy_needed = min_starting_energy(graph, max_energy = 33)
+    #min_energy_needed = min_starting_energy(graph, starting_energy=30, max_energy = 33)
+    min_energy_needed = min_starting_energy(graph, starting_energy=30, max_energy=1000)
     end_time = time.time()
 
     print(f"Done! Finished in {end_time - start_time:.6f} seconds\n")
@@ -78,7 +81,7 @@ def main() -> None:
         print("No Optimal Path Found...\n")
     else:
         print(f"Minimum Starting Energy Needed To Finish: {min_energy_needed}\n") # Plus one since the min energy starts at 0.
-        print(f"Optimal Path: {graph.optimal_path} --- Finished Optimal Net Energy: {graph.optimal_path.net_energy_gain:.6f}\n")
+        print(f"Optimal Path: {graph.optimal_path}\n --- Finished Optimal Net Energy: {graph.optimal_path.net_energy_gain:.6f}\n")
     
 
     graph.write_solution_to_csv("solution.csv")
