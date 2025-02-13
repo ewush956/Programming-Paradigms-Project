@@ -8,7 +8,7 @@ class Path():
         self.path_list : int = []
         ''' A list of integers denoting the food_id of the current path '''
         self.net_energy_gain : int = 0
-        ''' The total net energy gain so far in the run '''
+        ''' The total net energy gained so far in the run '''
     
     def set_starting_position(self, starting_food : FoodItem):
         self.path_list.append(starting_food)
@@ -23,9 +23,6 @@ class Path():
         self.net_energy_gain += energy_gain
 
     def __str__(self):
-        final_string = ""
-        for node in self.path_list:
-            final_string = final_string + " -> " + str(node)
-        return final_string
+        return " -> ".join(str(node) for node in self.path_list)
         
     
