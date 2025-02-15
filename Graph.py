@@ -63,7 +63,7 @@ class Graph():
     def results_print(self) -> None:    
         print(f"Done! Finished in {self.solution_end_time - self.solution_start_time:.6f} seconds\n")
         if(not self.optimal_path.path_list):
-            print("No Optimal Path Found...\n")
+            print("❌ No Optimal Path Found...\n")
         else:
-            print(f"Minimum Starting Energy Needed To Finish: {self.min_energy_needed}\n") # Plus one since the min energy starts at 0.
-            print(f"Optimal Path: {self.optimal_path}\n --- Finished Optimal Net Energy: {self.optimal_path.net_energy_gain:.6f}\n")
+            print(f"✅ Minimum Starting Energy Needed To Finish: {self.min_energy_needed}\n") # Plus one since the min energy starts at 0.
+            print(f"✅ Optimal Path: {self.optimal_path}\n --- Finished Optimal Net Energy: {self.optimal_path.net_energy_gain:.6f}\n")
