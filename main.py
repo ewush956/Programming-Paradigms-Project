@@ -58,7 +58,7 @@ def solver_find_min_energy(graph : Graph, data : Data, starting_energy: int = 1,
     return max_energy  # If no valid path is found, return max_energy.
 
 
-def run(graph: Graph, data: Data, starting_energy : int = 1, max_energy : int = 1000) -> None:
+def setup_solver(graph: Graph, data: Data, starting_energy : int = 1, max_energy : int = 1000) -> None:
     """
     Initializes the graph, computes the optimal path, and writes the solution to a CSV file.
     """
@@ -71,12 +71,6 @@ def run(graph: Graph, data: Data, starting_energy : int = 1, max_energy : int = 
     graph.solution_start_time = time.time()
     graph.min_energy_needed = solver_find_min_energy(graph, data, starting_energy=starting_energy, max_energy=max_energy)
     graph.solution_end_time = time.time()
-    
-    # Update the final optimal path after solving (Optional, need to ensure plotting in solve() is enabled)
-    data.update_plot(graph, solved=True)
-    
-    # Show the final plot (Optional, requires other plotting functions to be enabled)
-    data.show_final_plot()
 
     # Write the solution to a CSV file
     graph.write_solution_to_csv("solution.csv")
@@ -84,7 +78,7 @@ def run(graph: Graph, data: Data, starting_energy : int = 1, max_energy : int = 
 
 if __name__ == "__main__":
     # 💾 Create a Data object and generate random data. Set the seed to a value for reproducibility.
-    data = Data(42069)
+    data = Data()
 
     # 📈 Create a Graph object and read the random data from the CSV file.
     graph = Graph()
@@ -93,7 +87,7 @@ if __name__ == "__main__":
     data.visual_delay = 0.0005
 
     # Generate random data and write it to a CSV file. Enter a value for the number of data points.
-    data.create_random_data(5)
+    data.create_random_data(4)
 
     # Read the random data from the CSV file.
     graph.read_csv_data("./random_coordinates_energy.csv")
@@ -111,10 +105,16 @@ if __name__ == "__main__":
     # Run the solver algorithm and dynamically update the plot.
     # The optimal path is stored in the graph object.
     # The solution is written to a CSV file which appear in order of the path taken.
-    run(graph, data,starting_energy=97, max_energy=1000)
+    setup_solver(graph, data, starting_energy=10, max_energy=50)
 
     # Print results and write the solution to a CSV file.
     graph.results_print()
+
+    # Update the final optimal path after solving (Optional, need to ensure plotting in solve() is enabled)
+    data.update_plot(graph, solved=True)
+    
+    # Show the final plot (Optional, requires other plotting functions to be enabled)
+    data.show_final_plot()
 
     # Show the solution plot with additional information. (Optional)
     data.plot_solution()
