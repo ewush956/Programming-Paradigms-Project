@@ -81,11 +81,11 @@ if __name__ == "__main__":
     starting_node_index = 0
 
     # Set the file path to read the data from. (Optional)
-    node_data_to_read = "./random_coordinates_energy.csv"
-    # node_data_to_read = "./<some_other_file>"
+    #node_data_to_read = "./random_coordinates_energy.csv"
+    node_data_to_read = "./our_random_data.csv"
 
     # 💾 Create a Data object and generate random data. Set the seed to a value for reproducibility.
-    data = Data(seed=42069)
+    data = Data()
 
     # 📈 Create a Graph object and read the random data from the CSV file.
     graph = Graph()
@@ -94,7 +94,7 @@ if __name__ == "__main__":
     data.visual_delay = 0.001
 
     # Generate random data and write it to a CSV file. Enter a value for the number of data points.
-    data.create_random_data(4)
+    data.create_random_data(3)
 
     # Read the random data from the CSV file.
     graph.read_csv_data(node_data_to_read)
@@ -112,7 +112,7 @@ if __name__ == "__main__":
     # Run the solver algorithm and dynamically update the plot.
     # The optimal path is stored in the graph object.
     # The solution is written to a CSV file which appear in order of the path taken.
-    setup_solver(graph, data, starting_energy=1, max_energy=500)
+    setup_solver(graph, data, starting_energy=50, max_energy=1000)
 
     # Print results and write the solution to a CSV file.
     graph.results_print()
