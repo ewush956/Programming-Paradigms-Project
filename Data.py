@@ -5,9 +5,14 @@ import numpy as np
 from Food_Item import FoodItem
 
 class Data:
-    def __init__(self, seed: int | None = None):
+    """
+    The Data class is responsible for generating random food item data, reading solution data,
+    and plotting the 3D solution using Matplotlib. It also contains interactive controls for
+    rotating the 3D plot.
+    """
+    def __init__(self, seed: int | None = None, filename : str = "random_coordinates_energy.csv" ):
         self.seed = seed
-        self.input_file = "random_coordinates_energy.csv"
+        self.input_file = filename
         self.solution_file = "solution.csv"
         random.seed(seed)
 

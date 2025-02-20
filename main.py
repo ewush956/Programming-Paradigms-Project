@@ -77,35 +77,42 @@ def setup_solver(graph: Graph, data: Data, starting_energy : int = 1, max_energy
 
 
 if __name__ == "__main__":
+    # Set the starting node index, default is zero. (Optional)
+    starting_node_index = 0
+
+    # Set the file path to read the data from. (Optional)
+    node_data_to_read = "./random_coordinates_energy.csv"
+    # node_data_to_read = "./<some_other_file>"
+
     # 💾 Create a Data object and generate random data. Set the seed to a value for reproducibility.
-    data = Data()
+    data = Data(seed=42069)
 
     # 📈 Create a Graph object and read the random data from the CSV file.
     graph = Graph()
 
     # Set the visual delay for the plot. (Optional)
-    data.visual_delay = 0.0005
+    data.visual_delay = 0.001
 
     # Generate random data and write it to a CSV file. Enter a value for the number of data points.
     data.create_random_data(4)
 
     # Read the random data from the CSV file.
-    graph.read_csv_data("./random_coordinates_energy.csv")
+    graph.read_csv_data(node_data_to_read)
 
     # Initialize the remaining food list from the data.
     graph.initialize_remaining_food()
     
     # Set up the starting conditions. Remove the starting node from the remaining food list.
-    graph.remaining_food.remove(0)
+    graph.remaining_food.remove(starting_node_index)
 
     # Add the starting node to the current path. 
     # NOTE: The starting node is always 0 to find the minimum energy needed.
-    graph.current_path.path_list.append(0)
+    graph.current_path.path_list.append(starting_node_index)
 
     # Run the solver algorithm and dynamically update the plot.
     # The optimal path is stored in the graph object.
     # The solution is written to a CSV file which appear in order of the path taken.
-    setup_solver(graph, data, starting_energy=10, max_energy=50)
+    setup_solver(graph, data, starting_energy=1, max_energy=500)
 
     # Print results and write the solution to a CSV file.
     graph.results_print()
