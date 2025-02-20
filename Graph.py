@@ -49,7 +49,7 @@ class Graph():
         if(self.current_path.net_energy_gain >= self.optimal_path.net_energy_gain):
             self.optimal_path.path_list = self.current_path.path_list[:]
             self.optimal_path.net_energy_gain = self.current_path.net_energy_gain 
-            print(f"Current Optimal: {self.optimal_path} \nInterim Net Energy: {self.optimal_path.net_energy_gain:.6f}\n")
+            print(f"Current Optimal: {self.optimal_path} \nInterim Net Gogurt Bars Retained: {self.optimal_path.net_energy_gain:.6f}\n")
             
     def initialize_remaining_food(self):
         for food in self.all_food_nodes:
@@ -58,12 +58,12 @@ class Graph():
     def print_current_path_info(self) -> None:
         """Prints the current path and net energy gain."""
         print(f"Current Path: {self.current_path}")
-        print(f"Net Gain: {self.current_path.net_energy_gain}\n")
+        print(f"Net Gogurt Bars Retained: {self.current_path.net_energy_gain}\n")
         
     def results_print(self) -> None:    
         print(f"Done! Finished in {self.solution_end_time - self.solution_start_time:.6f} seconds\n")
         if(not self.optimal_path.path_list):
             print("❌ No Optimal Path Found...\n")
         else:
-            print(f"✅ Minimum Starting Energy Needed To Finish: {self.min_energy_needed}\n") # Plus one since the min energy starts at 0.
-            print(f"✅ Optimal Path: {self.optimal_path}\n --- Finished Optimal Net Energy: {self.optimal_path.net_energy_gain:.6f}\n")
+            print(f"✅ Minimum Starting Gogurt Bars Needed To Finish: {self.min_energy_needed}\n") # Plus one since the min energy starts at 0.
+            print(f"✅ Optimal Path: {self.optimal_path}\n --- Finished Optimal Net Gogurt Bars: {self.optimal_path.net_energy_gain:.6f}\n")
