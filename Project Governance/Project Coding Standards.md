@@ -66,23 +66,7 @@ def square(num: int) -> int:
 * Use inline comments judiciously and only to clarify complex logic.  
 * Ensure docstrings comprehensively describe purpose, parameters, and return values.
 
-# 6\. Error Handling
-
-* Implement exception handling instead of relying on error codes.  
-* Catch specific exceptions rather than using generic `except:`.
-
-```py
-try:
-    value = int(input("Enter a number: "))
-except ValueError:
-    print("Invalid input! Please enter a valid number.")
-```
-
-* Avoid broad exception handling (`except Exception:`) unless absolutely necessary.
-
-# 
-
-# 7\. Testing
+# 6\. Testing
 
 * Develop unit tests with `unittest` or `pytest` frameworks.  
 * Ensure sufficient test coverage across all modules.
@@ -92,13 +76,13 @@ def test_square():
     assert square(3) == 9
 ```
 
-# 8\. Version Control
+# 7\. Version Control
 
 * Utilize Git/Github for version control to track code changes effectively.  
 * Create meaningful commit messages to aid in clarity of each commit.  
 * If committing multiple files, commit each with a unique commit message according to the respective changes made in that file.
 
-# 9\. Code Reviews
+# 8\. Code Reviews
 
 * Conduct thorough code reviews to enforce best practices and maintain high-quality code.  
 * Assess code for readability, maintainability, and adherence to standards.  
