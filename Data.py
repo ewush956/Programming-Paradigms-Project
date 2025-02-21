@@ -36,8 +36,10 @@ class Data:
         """Generate random food item nodes with (x, y, z) coordinates and energy values."""
         points = []
         for i in range(num_points):
-            x, y, z = round(random.uniform(0, 50), 0), round(random.uniform(0, 50), 0), round(random.uniform(0, 50), 0)
-            energy = random.randint(1, 50)
+            x = round(random.uniform(-10, 10), 0)
+            y = round(random.uniform(-10, 10), 0)
+            z = round(random.uniform(-10, 10), 0)
+            energy = random.randint(1, 10)
             points.append(FoodItem(i, x, y, z, 0 if i == 0 else energy))
         return points
 
