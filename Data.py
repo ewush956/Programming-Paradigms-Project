@@ -1,7 +1,8 @@
 import csv
 import random
+
 import matplotlib.pyplot as plt
-import numpy as np
+
 from Food_Item import FoodItem
 
 class Data:
@@ -11,25 +12,30 @@ class Data:
     rotating the 3D plot.
     """
     def __init__(self, seed: int | None = None, filename : str = "random_coordinates_energy.csv" ):
-        self.seed = seed
+        # File names for input and solution data
         self.input_file = filename
+        # File name for solution data
         self.solution_file = "solution.csv"
+        # Set random seed for reproducibility
         random.seed(seed)
-
         # Data storage for solution visualization
         self.node_nums = []
+        # Coordinates and energy values for each node
         self.x_coords = []
         self.y_coords = []
         self.z_coords = []
         self.energy = []
-
-        # Matplotlib figure & interactive elements
+        # Matplotlib figure & interactive elements for 3D plot
         self.fig = None
+        # Matplotlib axis for 3D plot
         self.ax = None
+        # Event for 3D rotation (mouse press)
         self.start_event = None
-        self.start_azim = None
+        # Initial azimuth angle (rotation around z-axis)
+        self.start_azim = None       
+        # Initial elevation angle (rotation around x-axis)
         self.start_elev = None
-
+        # Delay for visualizing edges in the 3D plot (in seconds)
         self.visual_delay = 0.001
 
     def generate_random_points(self, num_points: int):

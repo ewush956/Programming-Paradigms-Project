@@ -1,6 +1,8 @@
-from Food_Item import FoodItem
 from math import sqrt
 from math import tanh
+
+from Food_Item import FoodItem
+
 
 def euclidean_distance(p1 : tuple, p2 : tuple):
     return sqrt(sum((a - b)**2 for a, b in zip(p1, p2)))

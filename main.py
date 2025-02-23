@@ -1,7 +1,9 @@
 # main.py
 import bisect
 import time
+
 import matplotlib.pyplot as plt
+
 from proj_math import get_total_cost
 from Graph import Graph
 from Data import Data
@@ -112,7 +114,7 @@ if __name__ == "__main__":
     # Run the solver algorithm and dynamically update the plot.
     # The optimal path is stored in the graph object.
     # The solution is written to a CSV file which appear in order of the path taken.
-    setup_solver(graph, data, starting_energy=1, max_energy=60)
+    setup_solver(graph, data, starting_energy=10, max_energy=60)
 
     # Print results and write the solution to a CSV file.
     graph.results_print()

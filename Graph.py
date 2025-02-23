@@ -1,6 +1,7 @@
+import csv
+
 from Food_Item import FoodItem
 from Path import Path
-import csv
 
 class Graph():
     """
