@@ -1,4 +1,7 @@
-# Python Coding Standards
+# Python Coding Standards for the Comp 3649 Project
+## *Developed by Dru, Evan, and Amtoj*
+<br></br>
+
 
 # 1\. General Guidelines
 
@@ -8,14 +11,18 @@
 * Structure functions and methods to remain concise and single-purpose.  
 * Utilize docstring documentation for clarity.
 
-# 
+<br></br>
+#
+#
+<br></br>
+
 
 # 2\. Code Formatting
 
-* Use **1 tab space per indentation level.**  
-* Keep lines **within 79 characters** for improved readability (72 for docstrings/comments).  
-* Utilize blank lines to enhance logical separation within the code.  
-* Avoid trailing whitespace to maintain clean version control.  
+* Use **1 tab space per indentation level.**
+* Keep code lines **within 80 characters where possible** for improved readability.  
+* Utilize blank lines to enhance logical separation within the code.
+* Avoid trailing whitespace to maintain clean version control.
 * Organize imports as follows, with standard, third-party, and local module imports separated:
 
 ```py
@@ -31,6 +38,11 @@ from mymodule import myfunction
 * Ensure a single space around operators and after commas for readability.  
 * Use double quotes (`""`) for strings, reserving single quotes (`'`) for cases where necessary.
 
+<br></br>
+#
+#
+<br></br>
+
 # 3\. Naming Conventions {#3.-naming-conventions}
 
 | Component | Naming Convention | Example |
@@ -39,8 +51,13 @@ from mymodule import myfunction
 | Constants | UPPERCASE\_WITH\_UNDERSCORES | `MAX_RETRIES = 5` |
 | Functions | lowercase\_with\_underscores | `def calculate_total():` |
 | Classes | CamelCase | `class DataProcessor:` |
-| Private Variables | \_single\_leading\_underscore | `_temp_value = 42` |
 | Module Names | lowercase snakecase | `my_module.py` |
+
+
+<br></br>
+#
+#
+<br></br>
 
 # 4\. Functions and Methods
 
@@ -52,6 +69,13 @@ def add_numbers(a: int, b: int) -> int:
 ```
 
 * Keep functions focused and modular to support reusability and testability.
+
+
+<br></br>
+#
+#
+<br></br>
+
 
 # 5\. Docstrings and Comments
 
@@ -66,6 +90,12 @@ def square(num: int) -> int:
 * Use inline comments judiciously and only to clarify complex logic.  
 * Ensure docstrings comprehensively describe purpose, parameters, and return values.
 
+<br></br>
+#
+#
+<br></br>
+
+
 # 6\. Testing
 
 * Develop unit tests with `unittest` or `pytest` frameworks.  
@@ -76,11 +106,25 @@ def test_square():
     assert square(3) == 9
 ```
 
+
+<br></br>
+#
+#
+<br></br>
+
+
 # 7\. Version Control
 
 * Utilize Git/Github for version control to track code changes effectively.  
 * Create meaningful commit messages to aid in clarity of each commit.  
 * If committing multiple files, commit each with a unique commit message according to the respective changes made in that file.
+
+
+<br></br>
+#
+#
+<br></br>
+
 
 # 8\. Code Reviews
 
