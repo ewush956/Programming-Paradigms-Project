@@ -84,7 +84,7 @@ if __name__ == "__main__":
 
     # Set the file path to read the data from. (Optional)
     #node_data_to_read = "./random_coordinates_energy.csv"
-    node_data_to_read = "./our_random_data.csv"
+    node_data_to_read = "./memo_test_data.csv"
 
     # 💾 Create a Data object and generate random data. Set the seed to a value for reproducibility.
     data = Data()
