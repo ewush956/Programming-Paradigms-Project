@@ -23,21 +23,21 @@ def test_food_item_creation_floats():
     assert food_item.energy == 5
 
 # Test a variety of invalid inputs to the food_id attribute in the FoodItem class constructor.
-# This test uses a pytest decorator to parametrize the test function with a list of invalid inputs.
+# This test uses a pytest decorator to parameterize the test function with a list of invalid inputs.
 @pytest.mark.parametrize("invalid_id", [-1, "a", 3.5, [], ()])
 def test_invalid_food_id(invalid_id):
     with pytest.raises(ValueError):
         FoodItem(food_id=invalid_id, x=1.0, y=2.0, z=3.0, energy=10)
 
 # Test a variety of invalid inputs to the coordinate attribute in the FoodItem class constructor.
-# This test uses a pytest decorator to parametrize the test function with a list of invalid inputs.
+# This test uses a pytest decorator to parameterize the test function with a list of invalid inputs.
 @pytest.mark.parametrize("invalid_coord", [[],{},(),'a', "Hello"])
 def test_invalid_food_coord(invalid_coord):
     with pytest.raises(TypeError):
         FoodItem(food_id=0, x=invalid_coord, y=2.0, z=3.0, energy=10)
 
 # Test a variety of invalid inputs to the energy attribute in the FoodItem class constructor.
-# This test uses a pytest decorator to parametrize the test function with a list of invalid inputs.
+# This test uses a pytest decorator to parameterize the test function with a list of invalid inputs.
 @pytest.mark.parametrize("invalid_energy", [[],{},(),'a', "Hello"])
 def test_invalid_food_energy(invalid_energy):
     with pytest.raises(TypeError):
