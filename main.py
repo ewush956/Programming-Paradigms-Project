@@ -1,123 +1,146 @@
-from Graph import Graph
-from Food_Item import FoodItem
-from proj_math import get_total_cost
+# main.py
 import bisect
 import time
+
 import matplotlib.pyplot as plt
 
-plt.ion()
+from proj_math import get_total_cost
+from Graph import Graph
+from Data import Data
 
-fig = plt.figure()
-ax = fig.add_subplot(111, projection='3d')
 
-def update_plot(graph, solved : bool):
-    ax.clear()
-    # Plot all nodes (assuming each FoodItem has x, y, z attributes)
-    all_nodes = list(graph.all_food_nodes)
-    x_all = [node.x for node in all_nodes]
-    y_all = [node.y for node in all_nodes]
-    z_all = [node.z for node in all_nodes]
-    ax.scatter(x_all, y_all, z_all, c='purple', alpha=0.5)
-
-    # Plot current path in red
-    if graph.current_path.path_list:
-        path_nodes = [graph.all_food_nodes[node] for node in graph.current_path.path_list]
-        if (solved) :
-            path_nodes = [graph.all_food_nodes[node] for node in graph.optimal_path.path_list]
-        path_x = [node.x for node in path_nodes]
-        path_y = [node.y for node in path_nodes]
-        path_z = [node.z for node in path_nodes]
-        ax.plot(path_x, path_y, path_z, color='purple', marker='o')
-
-    plt.draw()
-    plt.pause(0.06)
-def print_current_path(graph: Graph) -> None:
-    """Prints the current path and net energy gain."""
-    print(f"Current Path: {graph.current_path}")
-    #print(f"Net Gain: {graph.current_path.net_energy_gain}\n")
-
-def solve(graph: Graph, node: FoodItem) -> None:
+def solve(graph : Graph, 
+          node : int, 
+          data : Data, 
+          visual_delay : float = 0.001) -> None:
     """
     Recursively explores all possible paths starting from the given node.
 
     If there are no remaining food items, it updates the optimal path.
-    Otherwise, for each food in the remaining list, if there is enough energy to reach it,
-    the algorithm moves forward and then backtracks to explore other options.
+    Otherwise, for each food in the remaining list, if there is enough 
+    energy to reach it, the algorithm moves forward and then backtracks 
+    to explore other options.
     """
-    #print_current_path(graph)
     if not graph.remaining_food:
         graph.update_optimal()
         return
 
-    # Iterate over a copy of the list to allow modifications during iteration.
     for food in list(graph.remaining_food):
         next_node = graph.all_food_nodes[food]
         cost = get_total_cost(node, next_node)
 
         if graph.current_path.net_energy_gain >= cost:
-            # Move forward: choose this food item.
+            # Move forward.
             graph.remaining_food.remove(food)
             graph.current_path.path_list.append(food)
             graph.current_path.net_energy_gain -= cost
             graph.current_path.net_energy_gain += next_node.energy
-            
-            update_plot(graph, False)
-            # Recursively explore from the new node.
-            solve(graph, next_node)
-            
-            # Backtrack: undo the changes to try another path.
+
+            # 🚀 **Live update the plot while solving (Optional) **🚀
+            data.update_plot(graph, solved=False)
+
+            solve(graph, next_node, data)
+
+            # Backtrack: undo changes to try another path.
             graph.current_path.net_energy_gain -= next_node.energy
             graph.current_path.net_energy_gain += cost
             graph.current_path.path_list.remove(food)
             bisect.insort(graph.remaining_food, food)
 
-            update_plot(graph, False)
-        #print_current_path(graph)
+            # 🚀 **Live update during backtracking (Optional) **🚀
+            data.update_plot(graph, solved=False)
 
-def min_starting_energy(graph: Graph, starting_energy = 1, max_energy: int = 1000) -> int:
+
+def solver_find_min_energy(graph : Graph, 
+                           data : Data, 
+                           starting_energy: int = 1, 
+                           max_energy: int = 1000) -> int:
     """
     Finds the minimum starting energy needed to complete a valid path.
-
-    Iterates through energy values from 0 to max_energy until a valid path is found.
-    Returns the first energy value that results in a valid path.
+    Iterates from starting_energy to max_energy until a valid path is found.
     """
     for energy in range(starting_energy, max_energy + 1):
-        print(f"Attempting to find optimal route with {energy} starting energy\n")
         graph.current_path.net_energy_gain = energy
-        solve(graph, graph.all_food_nodes[0])
+        solve(graph, graph.all_food_nodes[0], data)
         if graph.optimal_path.path_list:
             return energy
-    return max_energy  # Return max_energy if no valid path is found
+    return max_energy  # If no valid path is found, return max_energy.
 
-def main() -> None:
-    """Initializes the graph, computes the optimal path, and writes the solution to a CSV file."""
-    graph = Graph()
-    graph.read_csv_data("./random_coordinates_energy.csv")
-    graph.initialize_remaining_food()
+
+def setup_solver(graph: Graph, 
+                 data: Data, 
+                 starting_energy : int = 1, 
+                 max_energy : int = 1000) -> None:
+    """
+    Initializes the graph, computes the optimal path, 
+    and writes the solution to a CSV file.
+    """
+    print("Searching for optimal path 🔎 ...\n")
     
-    # Initialize starting conditions using food item 0.
-    graph.remaining_food.remove(0)
-    graph.current_path.path_list.append(0)
+    # Start live plotting (Optional, need to ensure plotting in solve() is enabled)
+    plt.ion()  # 🔴 **Enable interactive mode for live updates (ooooo emoji's)**
     
-    print("Searching for optimal path...\n")
-    start_time = time.time()
-    #min_energy_needed = min_starting_energy(graph, starting_energy=30, max_energy = 33)
-    min_energy_needed = min_starting_energy(graph, starting_energy=61, max_energy=1000)
-    end_time = time.time()
-    update_plot(graph, True)
-    plt.ioff()
-    plt.show()
+    # Start the timer and find the minimum starting energy.
+    graph.solution_start_time = time.time()
+    graph.min_energy_needed = solver_find_min_energy(graph, data, 
+                                                    starting_energy=starting_energy, 
+                                                    max_energy=max_energy)
+    graph.solution_end_time = time.time()
 
-    print(f"Done! Finished in {end_time - start_time:.6f} seconds\n")
-
-    if(not graph.optimal_path.path_list):
-        print("No Optimal Path Found...\n")
-    else:
-        print(f"Minimum Starting Energy Needed To Finish: {min_energy_needed}\n") # Plus one since the min energy starts at 0.
-        print(f"Optimal Path: {graph.optimal_path}\n --- Finished Optimal Net Energy: {graph.optimal_path.net_energy_gain:.6f}\n")
-    
-
+    # Write the solution to a CSV file
     graph.write_solution_to_csv("solution.csv")
 
+
 if __name__ == "__main__":
-    main()
+    # Set the starting node index, default is zero. (Optional)
+    starting_node_index = 0
+
+    # Set the file path to read the data from. (Optional)
+    #node_data_to_read = "./random_coordinates_energy.csv"
+    node_data_to_read = "./memo_test_data.csv"
+
+    # 💾 Create a Data object and generate random data. Set the seed to a value for reproducibility.
+    data = Data()
+
+    # 📈 Create a Graph object and read the random data from the CSV file.
+    graph = Graph()
+
+    # Set the visual delay for the plot. (Optional)
+    data.visual_delay = 0.0001
+
+    # Generate random data and write it to a CSV file. Enter a value for the number of data points.
+    data.create_random_data(4)
+
+    # Read the random data from the CSV file.
+    graph.read_csv_data(node_data_to_read)
+
+    # Initialize the remaining food list from the data.
+    graph.initialize_remaining_food()
+
+    # Test to just visually assert the food items are read correctly.
+    # for node in graph.all_food_nodes:
+    #     print(node)
+    
+    # Set up the starting conditions. Remove the starting node from the remaining food list.
+    graph.remaining_food.remove(starting_node_index)
+
+    # Add the starting node to the current path. 
+    # NOTE: The starting node is always 0 to find the minimum energy needed.
+    graph.current_path.path_list.append(starting_node_index)
+
+    # Run the solver algorithm and dynamically update the plot.
+    # The optimal path is stored in the graph object.
+    # The solution is written to a CSV file which appear in order of the path taken.
+    setup_solver(graph, data, starting_energy=10, max_energy=60)
+
+    # Print results and write the solution to a CSV file.
+    graph.results_print()
+
+    # Update the final optimal path after solving (Optional, need to ensure plotting in solve() is enabled)
+    data.update_plot(graph, solved=True)
+    
+    # Show the final plot (Optional, requires other plotting functions to be enabled)
+    data.show_final_plot()
+
+    # Show the solution plot with additional information. (Optional)
+    data.plot_solution()
