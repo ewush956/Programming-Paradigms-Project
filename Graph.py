@@ -6,10 +6,10 @@ from Path import Path
 class Graph():
     """
     The Graph class represents the problem domain for the traversal problem.
-    It contains information about the available food items from the CSV dataset, the remaining 
-    food that has not been "eaten", and two instances of the Path class: optimal_path (which
-    represents the current best path found) and current_path (which represents the current path
-    being run in the problem).
+    It contains information about the available food items from the CSV dataset,
+    the remaining food that has not been "eaten", and two instances of the 
+    Path class: optimal_path (which represents the current best path found) and 
+    current_path (which represents the current path being run in the problem).
     """
 
     def __init__(self):
