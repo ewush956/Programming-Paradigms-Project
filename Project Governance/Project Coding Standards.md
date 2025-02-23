@@ -43,6 +43,7 @@ from mymodule import myfunction
 #
 <br></br>
 
+
 # 3\. Naming Conventions {#3.-naming-conventions}
 
 | Component | Naming Convention | Example |
@@ -58,6 +59,7 @@ from mymodule import myfunction
 #
 #
 <br></br>
+
 
 # 4\. Functions and Methods
 
