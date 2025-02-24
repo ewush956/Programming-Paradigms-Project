@@ -9,8 +9,6 @@ from Data import Data
 from Path import Path
 from proj_math import get_total_cost
 
-
-
 class Graph:
     """
     The Graph class represents the problem domain for the traversal problem.
@@ -19,20 +17,18 @@ class Graph:
     Path class: optimal_path (which represents the current best path found) and 
     current_path (which represents the current path being run in the problem).
     """
-
-    def __init__(self):
+    def __init__(self, seed : int | None = None):
         self.optimal_path = Path()
         self.current_path = Path()
+        self.data = Data(seed)
         self.remaining_food: list[int] = []
         self.all_food_nodes: list[FoodItem] = []
         self.min_energy_needed: int = 0
         self.solution_start_time = 0
         self.solution_end_time = 0
+        self.live_plot = False
 
-
-    def solve(self, node: FoodItem, 
-              data: Data, 
-              live_plot: bool = False) -> None:
+    def solve(self, node: FoodItem) -> None:
         """
         Recursively explores paths and finds the optimal solution.
 
@@ -54,30 +50,31 @@ class Graph:
                 # Move forward
                 self.graph_move_forward(next_node, cost)
 
-                print(f"Moving Forward --> :\t{self.current_path.path_list}")
+                #print(f"Moving Forward --> :\t{self.current_path.path_list}")
 
-                time.sleep(data.visual_delay)
+                time.sleep(self.data.visual_delay)
 
                 # Update plot visually
-                if live_plot:
-                    data.update_plot(self)
+                if self.live_plot:
+                    self.data.update_plot(self)
 
-                self.solve(next_node, data, live_plot)
+                self.solve(next_node)
 
                 # Backtrack
                 self.graph_backtrack(next_node, cost)
 
-                print(f"Backtracking <-- :\t{self.current_path.path_list}")
+                #print(f"Backtracking <-- :\t{self.current_path.path_list}")
 
-                time.sleep(data.visual_delay)
+                time.sleep(self.data.visual_delay)
 
                 # Update plot visually
-                if live_plot:
-                    data.update_plot(self)
+                if self.live_plot:
+                    self.data.update_plot(self)
 
     def graph_move_forward(self, food_item: FoodItem, cost: float) -> None:
         """
-        Moves the graph forward by updating the current path, net energy gain, and remaining food list.
+        Moves the graph forward by updating the current path, net energy gain, 
+        and remaining food list.
         """
         if food_item.food_id in self.remaining_food:
             self.remaining_food.remove(food_item.food_id)
@@ -96,28 +93,23 @@ class Graph:
             self.current_path.path_list.remove(food_item.food_id)
             bisect.insort(self.remaining_food, food_item.food_id)
 
-
-
-
-    def solver_find_min_energy(self, data: Data, 
+    def solver_find_min_energy(self, 
                                starting_energy: int = 1, 
-                               max_energy: int = 1000,
-                               live_plot=False) -> int:
+                               max_energy: int = 1000) -> int:
         """
         Finds the minimum starting energy needed to complete a valid path.
         """
         for energy in range(starting_energy, max_energy + 1):
             self.current_path.net_energy_gain = energy
-            self.solve(self.all_food_nodes[0], data, live_plot)
+            self.solve(self.all_food_nodes[0])
             if self.optimal_path.path_list:
                 print(f"✅ Found optimal path with {energy} energy: {self.optimal_path.path_list}")
                 return energy
         return max_energy  # If no valid path is found, return max_energy set.
 
-    def setup(self, data: Data, 
+    def setup(self,
               starting_energy: int = 1, 
-              max_energy: int = 1000,
-              live_plot: bool = False) -> None:
+              max_energy: int = 1000) -> None:
         """
         Initializes the graph, computes the optimal path, and writes the solution to a CSV file.
         """
@@ -128,10 +120,11 @@ class Graph:
 
         # Start timer and find the minimum starting energy
         self.solution_start_time = time.time()
-        self.min_energy_needed = self.solver_find_min_energy(data, 
-                                                             starting_energy, 
-                                                             max_energy,
-                                                             live_plot)
+        
+        # Get the minimum energy needed to solve the problem by 
+        # finding the optimal path with the least energy needed.
+        self.min_energy_needed = self.solver_find_min_energy(starting_energy,
+                                                             max_energy)
         # Stop timer
         self.solution_end_time = time.time()
 
@@ -173,16 +166,10 @@ class Graph:
         if(self.current_path.net_energy_gain >= self.optimal_path.net_energy_gain):
             self.optimal_path.path_list = self.current_path.path_list[:]
             self.optimal_path.net_energy_gain = self.current_path.net_energy_gain 
-            # print(f"Current Optimal: {self.optimal_path} \nInterim Net Gogurt Bars Retained: {self.optimal_path.net_energy_gain:.6f}\n")
     
     def initialize_remaining_food(self):
         """Ensure the first food item is set as the starting node."""
         self.remaining_food = [food.food_id for food in self.all_food_nodes]
-
-    def print_current_path_info(self) -> None:
-        """Prints the current path and net energy gain."""
-        print(f"Current Path: {self.current_path}")
-        print(f"Net Gogurt Bars Retained: {self.current_path.net_energy_gain}\n")
         
     def results_print(self) -> None:    
         print(f"Done! Finished in {self.solution_end_time - self.solution_start_time:.6f} seconds\n")

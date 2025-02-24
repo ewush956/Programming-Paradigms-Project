@@ -75,10 +75,31 @@ class Data:
                 self.z_coords.append(float(row['Z']))
                 self.energy.append(int(row['Energy']))
 
+    def _plot_nodes(self, nodes, color='blue', alpha=0.5, size=50):
+        """Helper method to plot nodes."""
+        x_all = [node.x for node in nodes]
+        y_all = [node.y for node in nodes]
+        z_all = [node.z for node in nodes]
+        self.ax.scatter(x_all, y_all, z_all, c=color, alpha=alpha, s=size)
+
+    def _plot_edges(self, path_nodes, color='purple'):
+        """Helper method to plot edges between nodes."""
+        if len(path_nodes) > 1:
+            for i in range(1, len(path_nodes)):
+                start_node = path_nodes[i - 1]
+                end_node = path_nodes[i]
+                self.ax.plot(
+                    [start_node.x, end_node.x],
+                    [start_node.y, end_node.y],
+                    [start_node.z, end_node.z],
+                    color=color,
+                    marker='o'
+                )
+                plt.draw()
+                plt.pause(self.visual_delay)
 
     def update_plot(self, graph, solved: bool = False):
         """Updates the 3D plot with all food nodes and progressively draws edges with a delay."""
-        
         if self.fig is None:
             self.fig = plt.figure()
             self.ax = self.fig.add_subplot(1, 1, 1, projection='3d')
@@ -86,11 +107,7 @@ class Data:
         self.ax.clear()
 
         # Plot all food nodes
-        all_nodes = list(graph.all_food_nodes)
-        x_all = [node.x for node in all_nodes]
-        y_all = [node.y for node in all_nodes]
-        z_all = [node.z for node in all_nodes]
-        self.ax.scatter(x_all, y_all, z_all, c='red', alpha=0.5)
+        self._plot_nodes(list(graph.all_food_nodes), 'blue', 0.5, 50)
 
         # Retrieve the correct path nodes
         path_nodes = (
@@ -101,30 +118,13 @@ class Data:
 
         # Ensure the first node is always the starting node (food_id=0)
         if path_nodes and path_nodes[0].food_id != 0:
-            path_nodes.insert(0, graph.all_food_nodes[0])  
+            path_nodes.insert(0, graph.all_food_nodes[0])
 
         # Highlight the starting node (food_id=0) in red
-        start_node = graph.all_food_nodes[0]
-        self.ax.scatter(start_node.x, start_node.y, start_node.z, c='purple', s=100)
+        self._plot_nodes([graph.all_food_nodes[0]], color='purple', size=100)
 
-        # Draw edges only between valid nodes
-        if len(path_nodes) > 1:
-            for i in range(1, len(path_nodes)):
-                start_node = path_nodes[i - 1]
-                end_node = path_nodes[i]
-
-                # Only draw edges between nodes that are actually connected
-                if start_node.food_id in graph.current_path.path_list and end_node.food_id in graph.current_path.path_list:
-                    self.ax.plot(
-                        [start_node.x, end_node.x],
-                        [start_node.y, end_node.y],
-                        [start_node.z, end_node.z],
-                        color='purple',
-                        marker='o'
-                    )
-
-                    plt.draw()
-                    plt.pause(self.visual_delay)  
+        # Draw edges between nodes
+        self._plot_edges(path_nodes)
 
         plt.draw()
         plt.pause(self.visual_delay)

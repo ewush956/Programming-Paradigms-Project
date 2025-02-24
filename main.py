@@ -1,25 +1,24 @@
 from Graph import Graph
-from Data import Data
 
 if __name__ == "__main__":
     # Set the starting node index (Default: 0)
     starting_node_index = 0
 
+    # Create a Graph object and read data from CSV
+    graph = Graph()
+
     # Set file path for reading data (Optional)
     node_data_to_read = "./random_coordinates_energy.csv"
     # node_data_to_read = "./memo_test_data.csv"
 
-    # Create a Data object and generate random data
-    data = Data(42069)
-
-    # Create a Graph object and read data from CSV
-    graph = Graph()
-
     # Set visualization delay (Optional)
-    data.visual_delay = 0.05
+    graph.data.visual_delay = 0.05
 
     # Generate random data and write to CSV
-    data.create_random_data(4)
+    graph.data.create_random_data(4)
+
+    # Enable live plotting (Optional)
+    graph.live_plot = True
 
     # Read random data from CSV file
     graph.read_csv_data(node_data_to_read)
@@ -34,13 +33,13 @@ if __name__ == "__main__":
     graph.current_path.path_list.append(0)
 
     # Run solver with dynamic plotting
-    graph.setup(data, 
-                starting_energy=20, 
-                max_energy=100,
-                live_plot=False)
+    graph.setup(starting_energy=20, max_energy=100,)
 
     # Print results and save solution
     graph.results_print()
 
-    data.plot_solution()
-    data.show_final_plot()
+    # Plot the solution path to the graph
+    graph.data.plot_solution()
+
+    # Show the final plot of the solution
+    graph.data.show_final_plot()
