@@ -3,7 +3,8 @@ class FoodItem():
     """
     Represents a food item on a 3D Cartesian plane with an energy attribute.
     """
-    def __init__(self, food_id: int | None, 
+    def __init__(self, 
+                 food_id: int | None, 
                  x: float | None, 
                  y: float | None, 
                  z: float | None, 
@@ -26,7 +27,7 @@ class FoodItem():
         self.energy = energy
     
     @staticmethod
-    def _validate_inputs(self, food_id, x, y, z, energy) -> None:
+    def _validate_inputs(food_id, x, y, z, energy) -> None:
         """
         Validates the inputs to an instance of a FoodItem class.
 

@@ -75,7 +75,30 @@ class Data:
                 self.z_coords.append(float(row['Z']))
                 self.energy.append(int(row['Energy']))
 
-    def update_plot(self, graph, solved: bool):
+    def _plot_nodes(self, nodes, color='blue', alpha=0.5, size=50):
+        """Helper method to plot nodes."""
+        x_all = [node.x for node in nodes]
+        y_all = [node.y for node in nodes]
+        z_all = [node.z for node in nodes]
+        self.ax.scatter(x_all, y_all, z_all, c=color, alpha=alpha, s=size)
+
+    def _plot_edges(self, path_nodes, color='purple'):
+        """Helper method to plot edges between nodes."""
+        if len(path_nodes) > 1:
+            for i in range(1, len(path_nodes)):
+                start_node = path_nodes[i - 1]
+                end_node = path_nodes[i]
+                self.ax.plot(
+                    [start_node.x, end_node.x],
+                    [start_node.y, end_node.y],
+                    [start_node.z, end_node.z],
+                    color=color,
+                    marker='o'
+                )
+                plt.draw()
+                plt.pause(self.visual_delay)
+
+    def update_plot(self, graph, solved: bool = False):
         """Updates the 3D plot with all food nodes and progressively draws edges with a delay."""
         if self.fig is None:
             self.fig = plt.figure()
@@ -83,38 +106,26 @@ class Data:
 
         self.ax.clear()
 
-        # Plot all nodes (assumes each FoodItem has x, y, z attributes)
-        all_nodes = list(graph.all_food_nodes)
-        x_all = [node.x for node in all_nodes]
-        y_all = [node.y for node in all_nodes]
-        z_all = [node.z for node in all_nodes]
-        self.ax.scatter(x_all, y_all, z_all, c='purple', alpha=0.5)
+        # Plot all food nodes
+        self._plot_nodes(list(graph.all_food_nodes), 'blue', 0.5, 50)
 
-        # **Progressively plot edges (delayed)**
-        if graph.current_path.path_list:
-            path_nodes = (
-                [graph.all_food_nodes[node] for node in graph.optimal_path.path_list]
-                if solved else
-                [graph.all_food_nodes[node] for node in graph.current_path.path_list]
-            )
+        # Retrieve the correct path nodes
+        path_nodes = (
+            [graph.all_food_nodes[node] for node in graph.optimal_path.path_list]
+            if solved else
+            [graph.all_food_nodes[node] for node in graph.current_path.path_list]
+        )
 
-            # Draw edges one by one
-            for i in range(1, len(path_nodes)):
-                start_node = path_nodes[i - 1]
-                end_node = path_nodes[i]
+        # Ensure the first node is always the starting node (food_id=0)
+        if path_nodes and path_nodes[0].food_id != graph.starting_node_index:
+            path_nodes.insert(0, graph.all_food_nodes[graph.starting_node_index])
 
-                # Plot one segment at a time
-                self.ax.plot(
-                    [start_node.x, end_node.x],
-                    [start_node.y, end_node.y],
-                    [start_node.z, end_node.z],
-                    color='purple',
-                    marker='o'
-                )
+        # Highlight the starting node in purple
+        self._plot_nodes([graph.all_food_nodes[graph.starting_node_index]], color='purple', size=100)
 
-                plt.draw()
-                plt.pause(self.visual_delay)  # **Delays drawing each edge**
-        
+        # Draw edges between nodes
+        self._plot_edges(path_nodes)
+
         plt.draw()
         plt.pause(self.visual_delay)
 
@@ -155,11 +166,16 @@ class Data:
         self.fig.canvas.mpl_connect('motion_notify_event', self.on_motion)
         self.fig.canvas.mpl_connect('button_release_event', self.on_release)
 
+        plt.ioff()
         plt.show()
 
     def show_final_plot(self):
         """Turns off interactive mode and shows the final plot."""
         plt.ioff()
+
+        # Close any existing figures before showing the final one
+        plt.close('all')
+
         plt.show()
 
     # ========== INTERACTIVITY FUNCTIONS ==========
