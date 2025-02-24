@@ -29,34 +29,6 @@ class Graph:
         self.solution_start_time = 0
         self.solution_end_time = 0
 
-    def read_csv_data(self, filename: str):
-        """
-        Reads food item data from a CSV file and initializes food nodes.
-        """
-        with open(filename, 'r') as file:
-            csv_reader = csv.reader(file)
-            next(csv_reader)  # Skip header row
-            for row in csv_reader:
-                self.all_food_nodes.append(
-                    FoodItem(int(row[0]), float(row[1]), float(row[2]), float(row[3]), int(row[4]))
-                )
-
-    def write_solution_to_csv(self, filename: str):
-        """
-        Writes the optimal path solution to a CSV file.
-        """
-        with open(filename, 'w', newline='') as file:
-            csv_writer = csv.writer(file)
-            csv_writer.writerow(['Node Number', 'X', 'Y', 'Z', 'Energy'])
-            for food_id in self.optimal_path.path_list:  # food_id is an integer
-                food_item = self.all_food_nodes[food_id]  # Lookup FoodItem using food_id
-                csv_writer.writerow([
-                    food_item.food_id,
-                    food_item.x,
-                    food_item.y,
-                    food_item.z,
-                    food_item.energy
-                ])
 
     def solve(self, node: FoodItem, 
               data: Data, 
