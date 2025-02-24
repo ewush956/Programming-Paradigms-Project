@@ -36,7 +36,7 @@ if __name__ == "__main__":
     # Run solver with dynamic plotting
     graph.setup(data, 
                 starting_energy=10, 
-                max_energy=50,
+                max_energy=15,
                 live_plot=False)
 
     # Print results and save solution

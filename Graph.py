@@ -138,6 +138,7 @@ class Graph:
             self.current_path.net_energy_gain = energy
             self.solve(self.all_food_nodes[0], data, live_plot)
             if self.optimal_path.path_list:
+                print(f"✅ Found optimal path with {energy} energy: {self.optimal_path.path_list}")
                 return energy
         return max_energy  # If no valid path is found, return max_energy set.
 
@@ -165,8 +166,8 @@ class Graph:
         # Set minimum energy to the current path before solving
         self.current_path.net_energy_gain = self.min_energy_needed
 
-        # Solve again with the computed minimum energy
-        self.solve(self.all_food_nodes[0], data, live_plot)
+        # # Solve again with the computed minimum energy (Optional)
+        # self.solve(self.all_food_nodes[0], data, live_plot)
 
         # Write the solution to a CSV file
         self.write_solution_to_csv("solution.csv")
