@@ -15,8 +15,8 @@ class Path():
         ''' The total net energy gained so far in the run '''
 
     def __str__(self):
-        #return " --> ".join(str(node) for node in self.path_list)
-        return " 🍆💦  ".join(str(node) for node in self.path_list)
+        return " --> ".join(str(node) for node in self.path_list)
+        # return " 🍆💦  ".join(str(node) for node in self.path_list)
         #return " 👉😎👉  ".join(str(node) for node in self.path_list)
         #return " 👉 ".join(str(node) for node in self.path_list)
     
