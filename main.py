@@ -10,7 +10,7 @@ if __name__ == "__main__":
     # node_data_to_read = "./memo_test_data.csv"
 
     # Create a Data object and generate random data
-    data = Data()
+    data = Data(42069)
 
     # Create a Graph object and read data from CSV
     graph = Graph()
@@ -35,8 +35,8 @@ if __name__ == "__main__":
 
     # Run solver with dynamic plotting
     graph.setup(data, 
-                starting_energy=10, 
-                max_energy=15,
+                starting_energy=20, 
+                max_energy=100,
                 live_plot=False)
 
     # Print results and save solution
