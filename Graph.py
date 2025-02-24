@@ -48,7 +48,7 @@ class Graph:
 
             if self.current_path.net_energy_gain >= cost:
                 # Move forward
-                self.graph_move_forward(next_node, cost)
+                self.move_forward(next_node, cost)
 
                 #print(f"Moving Forward --> :\t{self.current_path.path_list}")
 
@@ -61,7 +61,7 @@ class Graph:
                 self.solve(next_node)
 
                 # Backtrack
-                self.graph_backtrack(next_node, cost)
+                self.backtrack(next_node, cost)
 
                 #print(f"Backtracking <-- :\t{self.current_path.path_list}")
 
