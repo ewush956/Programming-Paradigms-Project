@@ -75,46 +75,58 @@ class Data:
                 self.z_coords.append(float(row['Z']))
                 self.energy.append(int(row['Energy']))
 
-    def update_plot(self, graph, solved: bool):
+
+    def update_plot(self, graph, solved: bool = False):
         """Updates the 3D plot with all food nodes and progressively draws edges with a delay."""
+        
         if self.fig is None:
             self.fig = plt.figure()
             self.ax = self.fig.add_subplot(1, 1, 1, projection='3d')
 
         self.ax.clear()
 
-        # Plot all nodes (assumes each FoodItem has x, y, z attributes)
+        # Plot all food nodes
         all_nodes = list(graph.all_food_nodes)
         x_all = [node.x for node in all_nodes]
         y_all = [node.y for node in all_nodes]
         z_all = [node.z for node in all_nodes]
-        self.ax.scatter(x_all, y_all, z_all, c='purple', alpha=0.5)
+        self.ax.scatter(x_all, y_all, z_all, c='purple', alpha=0.5, label="Food Items")
 
-        # **Progressively plot edges (delayed)**
-        if graph.current_path.path_list:
-            path_nodes = (
-                [graph.all_food_nodes[node] for node in graph.optimal_path.path_list]
-                if solved else
-                [graph.all_food_nodes[node] for node in graph.current_path.path_list]
-            )
+        # ✅ Retrieve the correct path nodes
+        path_nodes = (
+            [graph.all_food_nodes[node] for node in graph.optimal_path.path_list]
+            if solved else
+            [graph.all_food_nodes[node] for node in graph.current_path.path_list]
+        )
 
-            # Draw edges one by one
+        # ✅ Ensure the first node is always the starting node (food_id=0)
+        if path_nodes and path_nodes[0].food_id != 0:
+            path_nodes.insert(0, graph.all_food_nodes[0])  
+
+        # ✅ Highlight the starting node (food_id=0) in red
+        start_node = graph.all_food_nodes[0]
+        self.ax.scatter(start_node.x, start_node.y, start_node.z, c='red', s=100, label="Start Node")
+
+        # ✅ Ensure edges are drawn **only between consecutive valid nodes**
+        if len(path_nodes) > 1:
             for i in range(1, len(path_nodes)):
                 start_node = path_nodes[i - 1]
                 end_node = path_nodes[i]
 
-                # Plot one segment at a time
-                self.ax.plot(
-                    [start_node.x, end_node.x],
-                    [start_node.y, end_node.y],
-                    [start_node.z, end_node.z],
-                    color='purple',
-                    marker='o'
-                )
+                # ✅ Only draw edges between nodes that are actually connected
+                if start_node.food_id in graph.current_path.path_list and end_node.food_id in graph.current_path.path_list:
+                    self.ax.plot(
+                        [start_node.x, end_node.x],
+                        [start_node.y, end_node.y],
+                        [start_node.z, end_node.z],
+                        color='purple',
+                        marker='o'
+                    )
 
-                plt.draw()
-                plt.pause(self.visual_delay)  # **Delays drawing each edge**
-        
+                    plt.draw()
+                    plt.pause(self.visual_delay)  
+
+        self.ax.legend()
         plt.draw()
         plt.pause(self.visual_delay)
 

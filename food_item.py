@@ -26,7 +26,7 @@ class FoodItem():
         self.energy = energy
     
     @staticmethod
-    def _validate_inputs(self, food_id, x, y, z, energy) -> None:
+    def _validate_inputs(food_id, x, y, z, energy) -> None:
         """
         Validates the inputs to an instance of a FoodItem class.
 
