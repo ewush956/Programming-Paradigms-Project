@@ -117,11 +117,11 @@ class Data:
         )
 
         # Ensure the first node is always the starting node (food_id=0)
-        if path_nodes and path_nodes[0].food_id != 0:
-            path_nodes.insert(0, graph.all_food_nodes[0])
+        if path_nodes and path_nodes[0].food_id != graph.starting_node_index:
+            path_nodes.insert(0, graph.all_food_nodes[graph.starting_node_index])
 
-        # Highlight the starting node (food_id=0) in red
-        self._plot_nodes([graph.all_food_nodes[0]], color='purple', size=100)
+        # Highlight the starting node in purple
+        self._plot_nodes([graph.all_food_nodes[graph.starting_node_index]], color='purple', size=100)
 
         # Draw edges between nodes
         self._plot_edges(path_nodes)

@@ -17,7 +17,9 @@ class Graph:
     Path class: optimal_path (which represents the current best path found) and 
     current_path (which represents the current path being run in the problem).
     """
-    def __init__(self, seed : int | None = None):
+    def __init__(self, 
+                 seed : int | None = None, 
+                 live_plot : bool = False) -> None:
         self.optimal_path = Path()
         self.current_path = Path()
         self.data = Data(seed)
@@ -26,7 +28,8 @@ class Graph:
         self.min_energy_needed: int = 0
         self.solution_start_time = 0
         self.solution_end_time = 0
-        self.live_plot = False
+        self.live_plot = live_plot
+        self.starting_node_index = 0
 
     def solve(self, node: FoodItem) -> None:
         """
@@ -56,7 +59,7 @@ class Graph:
 
                 # Update plot visually
                 if self.live_plot:
-                    self.data.update_plot(self)
+                    self.data.update_plot(graph=self)
 
                 self.solve(next_node)
 
@@ -69,7 +72,7 @@ class Graph:
 
                 # Update plot visually
                 if self.live_plot:
-                    self.data.update_plot(self)
+                    self.data.update_plot(graph=self)
 
     def move_forward(self, food_item: FoodItem, cost: float) -> None:
         """
