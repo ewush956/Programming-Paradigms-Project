@@ -74,7 +74,7 @@ class Graph:
             self.update_optimal()
             return
 
-        for food_id in self.remaining_food:
+        for food_id in list(self.remaining_food):
             next_node = self.all_food_nodes[food_id]
             cost = get_total_cost(node, next_node)
 
@@ -82,7 +82,6 @@ class Graph:
                 # Move forward
                 self.graph_move_forward(next_node, cost)
 
-                # Print the current path after moving forward
                 print(f"Moving Forward --> :\t{self.current_path.path_list}")
 
                 time.sleep(data.visual_delay)
@@ -96,7 +95,6 @@ class Graph:
                 # Backtrack
                 self.graph_backtrack(next_node, cost)
 
-                # Print the current path after backtracking
                 print(f"Backtracking <-- :\t{self.current_path.path_list}")
 
                 time.sleep(data.visual_delay)
@@ -109,19 +107,25 @@ class Graph:
         """
         Moves the graph forward by updating the current path, net energy gain, and remaining food list.
         """
-        self.remaining_food.remove(food_item.food_id)
-        self.current_path.path_list.append(food_item.food_id)
-        self.current_path.net_energy_gain -= cost
-        self.current_path.net_energy_gain += food_item.energy
-
+        if food_item.food_id in self.remaining_food:
+            self.remaining_food.remove(food_item.food_id)
+            self.current_path.path_list.append(food_item.food_id)
+            self.current_path.net_energy_gain -= cost
+            self.current_path.net_energy_gain += food_item.energy
+        
+        
     def graph_backtrack(self, food_item: FoodItem, cost: float) -> None:
         """
         Backtracks the graph to explore different paths.
         """
-        self.current_path.net_energy_gain -= food_item.energy
-        self.current_path.net_energy_gain += cost
-        self.current_path.path_list.remove(food_item.food_id)
-        bisect.insort(self.remaining_food, food_item.food_id)
+        if food_item.food_id in self.current_path.path_list:
+            self.current_path.net_energy_gain -= food_item.energy
+            self.current_path.net_energy_gain += cost
+            self.current_path.path_list.remove(food_item.food_id)
+            bisect.insort(self.remaining_food, food_item.food_id)
+
+
+
 
     def solver_find_min_energy(self, data: Data, 
                                starting_energy: int = 1, 
@@ -135,7 +139,7 @@ class Graph:
             self.solve(self.all_food_nodes[0], data, live_plot)
             if self.optimal_path.path_list:
                 return energy
-        return max_energy  # If no valid path is found, return max_energy.
+        return max_energy  # If no valid path is found, return max_energy set.
 
     def setup(self, data: Data, 
               starting_energy: int = 1, 
@@ -155,6 +159,7 @@ class Graph:
                                                              starting_energy, 
                                                              max_energy,
                                                              live_plot)
+        # Stop timer
         self.solution_end_time = time.time()
 
         # Set minimum energy to the current path before solving
@@ -195,7 +200,7 @@ class Graph:
         if(self.current_path.net_energy_gain >= self.optimal_path.net_energy_gain):
             self.optimal_path.path_list = self.current_path.path_list[:]
             self.optimal_path.net_energy_gain = self.current_path.net_energy_gain 
-            print(f"Current Optimal: {self.optimal_path} \nInterim Net Gogurt Bars Retained: {self.optimal_path.net_energy_gain:.6f}\n")
+            # print(f"Current Optimal: {self.optimal_path} \nInterim Net Gogurt Bars Retained: {self.optimal_path.net_energy_gain:.6f}\n")
     
     def initialize_remaining_food(self):
         """Ensure the first food item is set as the starting node."""

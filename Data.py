@@ -90,30 +90,30 @@ class Data:
         x_all = [node.x for node in all_nodes]
         y_all = [node.y for node in all_nodes]
         z_all = [node.z for node in all_nodes]
-        self.ax.scatter(x_all, y_all, z_all, c='purple', alpha=0.5, label="Food Items")
+        self.ax.scatter(x_all, y_all, z_all, c='red', alpha=0.5)
 
-        # ✅ Retrieve the correct path nodes
+        # Retrieve the correct path nodes
         path_nodes = (
             [graph.all_food_nodes[node] for node in graph.optimal_path.path_list]
             if solved else
             [graph.all_food_nodes[node] for node in graph.current_path.path_list]
         )
 
-        # ✅ Ensure the first node is always the starting node (food_id=0)
+        # Ensure the first node is always the starting node (food_id=0)
         if path_nodes and path_nodes[0].food_id != 0:
             path_nodes.insert(0, graph.all_food_nodes[0])  
 
-        # ✅ Highlight the starting node (food_id=0) in red
+        # Highlight the starting node (food_id=0) in red
         start_node = graph.all_food_nodes[0]
-        self.ax.scatter(start_node.x, start_node.y, start_node.z, c='red', s=100, label="Start Node")
+        self.ax.scatter(start_node.x, start_node.y, start_node.z, c='purple', s=100)
 
-        # ✅ Ensure edges are drawn **only between consecutive valid nodes**
+        # Draw edges only between valid nodes
         if len(path_nodes) > 1:
             for i in range(1, len(path_nodes)):
                 start_node = path_nodes[i - 1]
                 end_node = path_nodes[i]
 
-                # ✅ Only draw edges between nodes that are actually connected
+                # Only draw edges between nodes that are actually connected
                 if start_node.food_id in graph.current_path.path_list and end_node.food_id in graph.current_path.path_list:
                     self.ax.plot(
                         [start_node.x, end_node.x],
@@ -126,7 +126,6 @@ class Data:
                     plt.draw()
                     plt.pause(self.visual_delay)  
 
-        self.ax.legend()
         plt.draw()
         plt.pause(self.visual_delay)
 
@@ -167,11 +166,16 @@ class Data:
         self.fig.canvas.mpl_connect('motion_notify_event', self.on_motion)
         self.fig.canvas.mpl_connect('button_release_event', self.on_release)
 
+        plt.ioff()
         plt.show()
 
     def show_final_plot(self):
         """Turns off interactive mode and shows the final plot."""
         plt.ioff()
+
+        # Close any existing figures before showing the final one
+        plt.close('all')
+
         plt.show()
 
     # ========== INTERACTIVITY FUNCTIONS ==========

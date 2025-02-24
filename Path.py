@@ -9,8 +9,7 @@ class Path():
     def __init__(self):
         self.current_food_node : FoodItem = FoodItem(None, None, None, None, None) # Starts with an empty FoodItem
         ''' The current food item being used. '''
-        #self.path_list : FoodItem = []
-        self.path_list : int = []
+        self.path_list : list[int] = []
         ''' A list of integers denoting the food_id of the current path '''
         self.net_energy_gain : int = 0
         ''' The total net energy gained so far in the run '''

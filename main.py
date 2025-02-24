@@ -16,10 +16,10 @@ if __name__ == "__main__":
     graph = Graph()
 
     # Set visualization delay (Optional)
-    data.visual_delay = 0.25
+    data.visual_delay = 0.05
 
     # Generate random data and write to CSV
-    data.create_random_data(3)
+    data.create_random_data(4)
 
     # Read random data from CSV file
     graph.read_csv_data(node_data_to_read)
@@ -27,13 +27,20 @@ if __name__ == "__main__":
     # Initialize remaining food list from data
     graph.initialize_remaining_food()
 
+    # Remove the starting node from the remaining food list
+    graph.remaining_food.remove(0)
+    
+    # Add the starting node to the path
+    graph.current_path.path_list.append(0)
+
     # Run solver with dynamic plotting
-    graph.setup(data, starting_energy=100, max_energy=500, live_plot=False)
+    graph.setup(data, 
+                starting_energy=10, 
+                max_energy=50,
+                live_plot=False)
 
     # Print results and save solution
     graph.results_print()
 
-    # Update and display final plot
-    data.update_plot(graph, solved=True)
-    data.show_final_plot()
     data.plot_solution()
+    data.show_final_plot()
