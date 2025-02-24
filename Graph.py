@@ -18,7 +18,8 @@ class Graph:
     current_path (which represents the current path being run in the problem).
     """
     def __init__(self, 
-                 seed : int | None = None, 
+                 seed : int | None = None,
+                 starting_node_index : int = 0,
                  live_plot : bool = False) -> None:
         self.optimal_path = Path()
         self.current_path = Path()
@@ -29,7 +30,7 @@ class Graph:
         self.solution_start_time = 0
         self.solution_end_time = 0
         self.live_plot = live_plot
-        self.starting_node_index = 0
+        self.starting_node_index = starting_node_index
 
     def solve(self, node: FoodItem) -> None:
         """
@@ -103,6 +104,7 @@ class Graph:
         Finds the minimum starting energy needed to complete a valid path.
         """
         for energy in range(starting_energy, max_energy + 1):
+            print(f"Trying energy: {energy} to start...")
             self.current_path.net_energy_gain = energy
             self.solve(self.all_food_nodes[0])
             if self.optimal_path.path_list:
