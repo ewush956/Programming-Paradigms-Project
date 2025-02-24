@@ -28,7 +28,7 @@ if __name__ == "__main__":
     graph.initialize_remaining_food()
 
     # Run solver with dynamic plotting
-    graph.setup(data, starting_energy=10, max_energy=60, live_plot=False)
+    graph.setup(data, starting_energy=100, max_energy=500, live_plot=False)
 
     # Print results and save solution
     graph.results_print()
