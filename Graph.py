@@ -71,7 +71,7 @@ class Graph:
                 if self.live_plot:
                     self.data.update_plot(self)
 
-    def graph_move_forward(self, food_item: FoodItem, cost: float) -> None:
+    def move_forward(self, food_item: FoodItem, cost: float) -> None:
         """
         Moves the graph forward by updating the current path, net energy gain, 
         and remaining food list.
@@ -82,8 +82,8 @@ class Graph:
             self.current_path.net_energy_gain -= cost
             self.current_path.net_energy_gain += food_item.energy
         
-        
-    def graph_backtrack(self, food_item: FoodItem, cost: float) -> None:
+
+    def backtrack(self, food_item: FoodItem, cost: float) -> None:
         """
         Backtracks the graph to explore different paths.
         """
