@@ -3,7 +3,8 @@ class FoodItem():
     """
     Represents a food item on a 3D Cartesian plane with an energy attribute.
     """
-    def __init__(self, food_id: int | None, 
+    def __init__(self, 
+                 food_id: int | None, 
                  x: float | None, 
                  y: float | None, 
                  z: float | None, 
