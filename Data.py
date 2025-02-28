@@ -25,13 +25,12 @@ class Data:
         # Starting node index
         self.starting_node = starting_node
 
+        # Input and output data file names
         self.input_data_file = input_data_file
-
         self.output_data_file = output_data_file
 
         # Data storage for solution visualization
         self.node_nums = []
-
 
         # Coordinates and energy values for each node
         self.x_coords = []

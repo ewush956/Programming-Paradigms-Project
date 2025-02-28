@@ -3,9 +3,9 @@ from graph import Graph
 if __name__ == "__main__":
     graph = Graph(seed=None, 
                 starting_node_index=0,
-                live_plot=True,
-                path_printing=True, 
-                optimal_update=False,
+                live_plot=False,
+                path_printing=False, 
+                optimal_update=True,
                 input_file="memo_test_data.csv",
                 output_file="solution.csv"
                 )
@@ -33,7 +33,7 @@ if __name__ == "__main__":
     """
 
     # Set the visual delay for plotting the graph (Optional, default is 0.005)
-    graph.data.visual_delay = 0.005
+    # graph.data.visual_delay = 0.005
     
     # Generate random data and write to CSV.
     # The number of points should be at least 3 more than the starting node 
@@ -56,8 +56,8 @@ if __name__ == "__main__":
         graph.current_path.path_list.append(graph.starting_node_index)
         
         # Run solver with dynamic plotting, with bounds on starting energy and max energy
-        graph.setup(starting_energy=150,
-                    max_energy=200)
+        graph.setup(starting_energy=1,
+                    max_energy=50)
 
         # Write the solution to a CSV file
         graph.write_solution_to_csv()
