@@ -136,7 +136,7 @@ class Graph:
 
     def setup(self,
               starting_energy: int = 1, 
-              max_energy: int = 1000) -> None:
+              max_energy: int = 100) -> None:
         """
         Initializes the graph, computes the optimal path, 
         and writes the solution to a CSV file.

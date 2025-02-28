@@ -95,14 +95,14 @@ class Data:
                 self.z_coords.append(float(row['Z']))
                 self.energy.append(int(row['Energy']))
 
-    def _plot_nodes(self, nodes, color='blue', alpha=0.5, size=50):
+    def _plot_nodes(self, nodes, color='blue', alpha=0.5, size=75):
         """Helper method to plot nodes."""
         x_all = [node.x for node in nodes]
         y_all = [node.y for node in nodes]
         z_all = [node.z for node in nodes]
         self.ax.scatter(x_all, y_all, z_all, c=color, alpha=alpha, s=size)
 
-    def _plot_edges(self, path_nodes, color='purple'):
+    def _plot_edges(self, path_nodes, color='black'):
         """Helper method to plot edges between nodes."""
         if len(path_nodes) > 1:
             for i in range(1, len(path_nodes)):
@@ -118,7 +118,7 @@ class Data:
                 plt.draw()
                 plt.pause(self.visual_delay)
 
-    def update_plot(self, graph, solved: bool = False):
+    def update_plot(self, graph):
         """Updates the 3D plot with all food nodes and progressively draws edges with a delay."""
         if self.fig is None:
             self.fig = plt.figure()
@@ -136,10 +136,6 @@ class Data:
         path_nodes = (
             [graph.all_food_nodes[node] for node in graph.current_path.path_list]
         )
-
-        # # Ensure the first node is always the starting node
-        # if path_nodes and path_nodes[0].food_id != graph.starting_node_index:
-        #     path_nodes.insert(0, graph.all_food_nodes[graph.starting_node_index])
 
         # Highlight the starting node in purple
         self._plot_nodes([graph.all_food_nodes[graph.starting_node_index]], color='purple', size=100)
@@ -163,18 +159,18 @@ class Data:
                              self.y_coords, 
                              self.z_coords, 
                              c=self.energy, 
-                             cmap='autumn', 
+                             cmap='cool', 
                              marker='o', 
                              alpha=1, 
-                             s=50)
+                             s=75)
 
         # Label each node with its node number
         for i in range(len(self.x_coords)):
             self.ax.text(self.x_coords[i], 
                          self.y_coords[i], 
                          self.z_coords[i], 
-                         f"{self.node_nums[i]}", 
-                         fontsize=10, 
+                         f" {self.node_nums[i]}", 
+                         fontsize=12, 
                          color='black')
 
         # Plot connecting path (if applicable)

@@ -1,13 +1,13 @@
 from Graph import Graph
 
 if __name__ == "__main__":
-    graph = Graph(seed=42, 
-                starting_node_index=1,
+    graph = Graph(seed=None, 
+                starting_node_index=0,
                 live_plot=True, 
                 path_printing=False, 
-                optimal_update=True,
-                input_file="random_coordinates_energy2.csv",
-                output_file="solution2.csv"
+                optimal_update=False,
+                input_file="random_coordinates_energy.csv",
+                output_file="solution.csv"
                 )
     """
     ==================== Creating a Graph object ====================
@@ -38,7 +38,7 @@ if __name__ == "__main__":
     # Generate random data and write to CSV.
     # The number of points should be at least 3 more than the starting node 
     # index to avoid index out of range errors and to form a graph path.
-    graph.data.create_random_data(num_points=4)
+    graph.data.create_random_data(num_points=5)
 
     # Read random data from CSV file
     graph.read_csv_data()
@@ -56,8 +56,8 @@ if __name__ == "__main__":
         graph.current_path.path_list.append(graph.starting_node_index)
         
         # Run solver with dynamic plotting, with bounds on starting energy and max energy
-        graph.setup(starting_energy=1, 
-                    max_energy=50)
+        graph.setup(starting_energy=1,
+                    max_energy=25)
 
         # Write the solution to a CSV file
         graph.write_solution_to_csv()
