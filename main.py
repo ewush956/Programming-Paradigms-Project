@@ -1,12 +1,12 @@
-from Graph import Graph
+from graph import Graph
 
 if __name__ == "__main__":
     graph = Graph(seed=None, 
                 starting_node_index=0,
-                live_plot=True, 
-                path_printing=False, 
+                live_plot=True,
+                path_printing=True, 
                 optimal_update=False,
-                input_file="random_coordinates_energy.csv",
+                input_file="memo_test_data.csv",
                 output_file="solution.csv"
                 )
     """
@@ -33,12 +33,12 @@ if __name__ == "__main__":
     """
 
     # Set the visual delay for plotting the graph (Optional, default is 0.005)
-    # graph.data.visual_delay = 0.01
+    graph.data.visual_delay = 0.005
     
     # Generate random data and write to CSV.
     # The number of points should be at least 3 more than the starting node 
     # index to avoid index out of range errors and to form a graph path.
-    graph.data.create_random_data(num_points=5)
+    # graph.data.create_random_data(num_points=5)
 
     # Read random data from CSV file
     graph.read_csv_data()
@@ -56,8 +56,8 @@ if __name__ == "__main__":
         graph.current_path.path_list.append(graph.starting_node_index)
         
         # Run solver with dynamic plotting, with bounds on starting energy and max energy
-        graph.setup(starting_energy=1,
-                    max_energy=25)
+        graph.setup(starting_energy=150,
+                    max_energy=200)
 
         # Write the solution to a CSV file
         graph.write_solution_to_csv()

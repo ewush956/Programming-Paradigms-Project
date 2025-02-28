@@ -3,7 +3,7 @@ import random
 
 import matplotlib.pyplot as plt
 
-from Food_Item import FoodItem
+from food_item import FoodItem
 
 class Data:
     """
@@ -115,8 +115,8 @@ class Data:
                     color=color,
                     marker='o'
                 )
-                plt.draw()
-                plt.pause(self.visual_delay)
+            plt.draw()
+            plt.pause(self.visual_delay)
 
     def update_plot(self, graph):
         """Updates the 3D plot with all food nodes and progressively draws edges with a delay."""

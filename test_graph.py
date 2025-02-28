@@ -1,9 +1,9 @@
 import pytest
 import os
 
-from Graph import Graph
-from Food_Item import FoodItem
-from Path import Path
+from graph import Graph
+from food_item import FoodItem
+from path import Path
 
 
 # Test the Graph class initialization method to ensure it initializes correctly.

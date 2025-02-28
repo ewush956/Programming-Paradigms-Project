@@ -1,7 +1,7 @@
 from math import sqrt
 from math import tanh
 
-from Food_Item import FoodItem
+from food_item import FoodItem
 
 
 def euclidean_distance(p1 : tuple, p2 : tuple):
