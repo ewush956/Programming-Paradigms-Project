@@ -56,21 +56,47 @@ class Data:
         # Delay for visualizing edges in the 3D plot (in seconds)
         self.visual_delay = 0.005
 
-    def generate_random_points(self, num_points: int):
+    def generate_random_points(self, 
+                               num_points: int,
+                               x_lower_limit: int = -10,
+                               x_upper_limit: int = 10,
+                               y_lower_limit: int = -10,
+                               y_upper_limit: int = 10,
+                               z_lower_limit: int = -10,
+                               z_upper_limit: int = 10,
+                               energy_lower_limit : int = 1,
+                               energy_upper_limit : int = 10) -> list[FoodItem]:
         """Generate random food item nodes with (x, y, z) coordinates and energy values."""
         points = []
         for i in range(num_points):
-            x = round(random.uniform(-10, 10), 0)
-            y = round(random.uniform(-10, 10), 0)
-            z = round(random.uniform(-10, 10), 0)
-            energy = random.randint(1, 10)
+            x = round(random.uniform(x_lower_limit, x_upper_limit))
+            y = round(random.uniform(y_lower_limit, y_upper_limit))
+            z = round(random.uniform(z_lower_limit, z_upper_limit))
+            energy = random.randint(energy_lower_limit, energy_upper_limit)
             points.append(FoodItem(i, x, y, z, 0
                                    if i == self.starting_node else energy))
         return points
 
-    def create_random_data(self, num_points=5):
+    def create_random_data(self, 
+                           num_points=5,                            
+                           x_lower_limit: int = -10,
+                           x_upper_limit: int = 10,
+                           y_lower_limit: int = -10,
+                           y_upper_limit: int = 10,
+                           z_lower_limit: int = -10,
+                           z_upper_limit: int = 10,
+                           energy_lower_limit : int = 1,
+                           energy_upper_limit : int = 10):
         """Create and save random food item data to a CSV file."""
-        points = self.generate_random_points(num_points)
+        points = self.generate_random_points(num_points,                            
+                                             x_lower_limit,
+                                             x_upper_limit,
+                                             y_lower_limit,
+                                             y_upper_limit,
+                                             z_lower_limit,
+                                             z_upper_limit,
+                                             energy_lower_limit,
+                                             energy_upper_limit)
         with open(file=self.input_data_file, mode="w", newline="") as csvfile:
             writer = csv.writer(csvfile)
             writer.writerow(["Node Number", "X", "Y", "Z", "Energy"])
