@@ -1,5 +1,17 @@
 from graph import Graph
 
+# Set the keyword arguments for the random data generator
+KWARGS = {
+  "x_lower_limit": 0,
+  "x_upper_limit": 10,
+  "y_lower_limit": 0,
+  "y_upper_limit": 10,
+  "z_lower_limit": 0,
+  "z_upper_limit": 5,
+  "energy_lower_limit": 1,
+  "energy_upper_limit": 10
+  }
+
 if __name__ == "__main__":
     graph = Graph(
                 seed=420,
@@ -34,22 +46,12 @@ if __name__ == "__main__":
     """
 
     # Set the visual delay for plotting the graph (Optional, default is 0.005)
-    graph.data.visual_delay = 0.0001
+    # graph.data.visual_delay = 0.0001
     
     # Generate random data and write to CSV.
     # The number of points should be at least 3 more than the starting node 
     # index to avoid index out of range errors and to form a graph path.
-    kwargs = {
-      "x_lower_limit": 0,
-      "x_upper_limit": 10,
-      "y_lower_limit": 0,
-      "y_upper_limit": 10,
-      "z_lower_limit": 0,
-      "z_upper_limit": 5,
-      "energy_lower_limit": 1,
-      "energy_upper_limit": 10
-    }
-    graph.data.create_random_data(num_points=12, **kwargs)
+    graph.data.create_random_data(num_points=12, **KWARGS)
 
     # Read random data from CSV file
     graph.read_csv_data()
