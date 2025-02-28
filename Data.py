@@ -10,33 +10,52 @@ class Data:
     The Data class is responsible for generating random food item data, reading solution data,
     and plotting the 3D solution using Matplotlib. It also contains interactive controls for
     rotating the 3D plot.
+
+    NOTE: This class is primarily only a part of the imperative project solution.
     """
-    def __init__(self, seed: int | None = None, filename : str = "random_coordinates_energy.csv" ):
-        # File names for input and solution data
-        self.input_file = filename
-        # File name for solution data
-        self.solution_file = "solution.csv"
+    def __init__(self, 
+                 seed: int | None = None, 
+                 starting_node: int = 0,
+                 input_data_file : str = "random_coordinates_energy.csv",
+                 output_data_file : str = "solution.csv") -> None:
+        
         # Set random seed for reproducibility
         random.seed(seed)
+
+        # Starting node index
+        self.starting_node = starting_node
+
+        self.input_data_file = input_data_file
+
+        self.output_data_file = output_data_file
+
         # Data storage for solution visualization
         self.node_nums = []
+
+
         # Coordinates and energy values for each node
         self.x_coords = []
         self.y_coords = []
         self.z_coords = []
         self.energy = []
+
         # Matplotlib figure & interactive elements for 3D plot
         self.fig = None
+
         # Matplotlib axis for 3D plot
         self.ax = None
+
         # Event for 3D rotation (mouse press)
         self.start_event = None
+
         # Initial azimuth angle (rotation around z-axis)
-        self.start_azim = None       
+        self.start_azim = None   
+
         # Initial elevation angle (rotation around x-axis)
         self.start_elev = None
+
         # Delay for visualizing edges in the 3D plot (in seconds)
-        self.visual_delay = 0.001
+        self.visual_delay = 0.005
 
     def generate_random_points(self, num_points: int):
         """Generate random food item nodes with (x, y, z) coordinates and energy values."""
@@ -46,13 +65,14 @@ class Data:
             y = round(random.uniform(-10, 10), 0)
             z = round(random.uniform(-10, 10), 0)
             energy = random.randint(1, 10)
-            points.append(FoodItem(i, x, y, z, 0 if i == 0 else energy))
+            points.append(FoodItem(i, x, y, z, 0
+                                   if i == self.starting_node else energy))
         return points
 
     def create_random_data(self, num_points=5):
         """Create and save random food item data to a CSV file."""
         points = self.generate_random_points(num_points)
-        with open(self.input_file, "w", newline="") as csvfile:
+        with open(file=self.input_data_file, mode="w", newline="") as csvfile:
             writer = csv.writer(csvfile)
             writer.writerow(["Node Number", "X", "Y", "Z", "Energy"])
             for food in points:
@@ -66,7 +86,7 @@ class Data:
         self.z_coords.clear()
         self.energy.clear()
         
-        with open(self.solution_file, mode='r', newline='') as file:
+        with open(file=self.output_data_file, mode='r', newline='') as file:
             reader = csv.DictReader(file)
             for row in reader:
                 self.node_nums.append(int(row['Node Number']))
@@ -86,8 +106,8 @@ class Data:
         """Helper method to plot edges between nodes."""
         if len(path_nodes) > 1:
             for i in range(1, len(path_nodes)):
-                start_node = path_nodes[i - 1]
-                end_node = path_nodes[i]
+                start_node = path_nodes[i-1] # Previous node
+                end_node = path_nodes[i] # Next node
                 self.ax.plot(
                     [start_node.x, end_node.x],
                     [start_node.y, end_node.y],
@@ -109,16 +129,17 @@ class Data:
         # Plot all food nodes
         self._plot_nodes(list(graph.all_food_nodes), 'blue', 0.5, 50)
 
-        # Retrieve the correct path nodes
+        # Label each node with its node number
+        for node in graph.all_food_nodes:
+            self.ax.text(node.x, node.y, node.z, f" {node.food_id} ", fontsize=12, color='black')
+
         path_nodes = (
-            [graph.all_food_nodes[node] for node in graph.optimal_path.path_list]
-            if solved else
             [graph.all_food_nodes[node] for node in graph.current_path.path_list]
         )
 
-        # Ensure the first node is always the starting node (food_id=0)
-        if path_nodes and path_nodes[0].food_id != graph.starting_node_index:
-            path_nodes.insert(0, graph.all_food_nodes[graph.starting_node_index])
+        # # Ensure the first node is always the starting node
+        # if path_nodes and path_nodes[0].food_id != graph.starting_node_index:
+        #     path_nodes.insert(0, graph.all_food_nodes[graph.starting_node_index])
 
         # Highlight the starting node in purple
         self._plot_nodes([graph.all_food_nodes[graph.starting_node_index]], color='purple', size=100)
@@ -130,7 +151,7 @@ class Data:
         plt.pause(self.visual_delay)
 
 
-    def plot_solution(self):
+    def plot_solution(self, filename: str = "solution.csv"):
         """Plot the 3D solution using Matplotlib with interactive controls."""
         self.read_solution_data()
         
@@ -138,11 +159,23 @@ class Data:
         self.ax = self.fig.add_subplot(1, 1, 1, projection='3d')
 
         # Scatter plot of food item nodes
-        sc = self.ax.scatter(self.x_coords, self.y_coords, self.z_coords, c=self.energy, cmap='autumn', marker='o', alpha=1, s=50)
+        sc = self.ax.scatter(self.x_coords, 
+                             self.y_coords, 
+                             self.z_coords, 
+                             c=self.energy, 
+                             cmap='autumn', 
+                             marker='o', 
+                             alpha=1, 
+                             s=50)
 
         # Label each node with its node number
         for i in range(len(self.x_coords)):
-            self.ax.text(self.x_coords[i], self.y_coords[i], self.z_coords[i], f"{self.node_nums[i]}", fontsize=10, color='black')
+            self.ax.text(self.x_coords[i], 
+                         self.y_coords[i], 
+                         self.z_coords[i], 
+                         f"{self.node_nums[i]}", 
+                         fontsize=10, 
+                         color='black')
 
         # Plot connecting path (if applicable)
         self.ax.plot(self.x_coords, self.y_coords, self.z_coords, marker='', color='grey')

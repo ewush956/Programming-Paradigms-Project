@@ -1,12 +1,12 @@
 from Food_Item import FoodItem
 
 class Path():
-    """
-    The Path class represents a path through the graph of food items. It contains information
-    about the current food item being used, the path taken so far, and the net energy gain
-    from the path.
-    """
     def __init__(self):
+        """
+        The Path class represents a path through the graph of food items. It contains information
+        about the current food item being used, the path taken so far, and the net energy gain
+        from the path.
+        """
         self.current_food_node : FoodItem = FoodItem(None, None, None, None, None) # Starts with an empty FoodItem
         ''' The current food item being used. '''
         self.path_list : list[int] = []

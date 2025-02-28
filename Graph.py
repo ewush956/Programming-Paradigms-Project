@@ -10,51 +10,69 @@ from Path import Path
 from proj_math import get_total_cost
 
 class Graph:
-    """
-    The Graph class represents the problem domain for the traversal problem.
-    It contains information about the available food items from the CSV dataset,
-    the remaining food that has not been "eaten", and two instances of the 
-    Path class: optimal_path (which represents the current best path found) and 
-    current_path (which represents the current path being run in the problem).
-    """
     def __init__(self, 
                  seed : int | None = None,
                  starting_node_index : int = 0,
-                 live_plot : bool = False) -> None:
+                 live_plot : bool = False,
+                 path_printing : bool = False,
+                 optimal_update : bool = False,
+                 input_file : str = "random_coordinates_energy.csv",
+                 output_file : str = "solution.csv") -> None:
+        """
+        The Graph class represents the problem domain for the traversal problem.
+        It contains information about the available food items from the CSV dataset,
+        the remaining food that has not been "eaten", and two instances of the 
+        Path class: optimal_path (which represents the current best path found) and 
+        current_path (which represents the current path being run in the problem).
+
+        Args:
+            seed: Set random seed for reproducibility (default = None).
+            starting_node_index: The starting node id from the coordinates.
+            live_plot: If you would like to see live plotting of the program.
+            optimal_update: Print the current optimal path when it is updated.
+            input_file: The CSV file containing the food item data.
+            output_file: The CSV file to write the solution to.
+        """
         self.optimal_path = Path()
         self.current_path = Path()
-        self.data = Data(seed)
+        self.data = Data(seed=seed,
+                         starting_node=starting_node_index,
+                         input_data_file=input_file,
+                         output_data_file=output_file)
         self.remaining_food: list[int] = []
         self.all_food_nodes: list[FoodItem] = []
         self.min_energy_needed: int = 0
         self.solution_start_time = 0
         self.solution_end_time = 0
         self.live_plot = live_plot
+        self.path_printing = path_printing
+        self.optimal_update = optimal_update
         self.starting_node_index = starting_node_index
 
-    def solve(self, node: FoodItem) -> None:
+    def solve(self, food_item: FoodItem) -> None:
         """
         Recursively explores paths and finds the optimal solution.
 
         Args:
-            node (FoodItem): The current node being explored.
-            data (Data): Data object for visualization.
-            live_plot (bool, optional): If True, updates the plot periodically. Defaults to False.
-            plot_frequency (int, optional): Number of steps between plot updates. Defaults to 10.
+            node (FoodItem): The current node being explored. 
+            Such as the starting food_item or the next food_item.
         """
         if not self.remaining_food:
             self.update_optimal()
+            if self.optimal_update:
+                print(
+                    f"\nFound A Path: {self.current_path.path_list}\n"
+                    f"Net Energy Remaining: {self.current_path.net_energy_gain:.6f}\n"
+                    )
             return
 
         for food_id in list(self.remaining_food):
-            next_node = self.all_food_nodes[food_id]
-            cost = get_total_cost(node, next_node)
+            next_food_item = self.all_food_nodes[food_id]
+            cost = get_total_cost(food_item, next_food_item)
 
             if self.current_path.net_energy_gain >= cost:
                 # Move forward
-                self.move_forward(next_node, cost)
-
-                #print(f"Moving Forward --> :\t{self.current_path.path_list}")
+                self.move_forward(next_food_item, cost)
 
                 time.sleep(self.data.visual_delay)
 
@@ -62,12 +80,10 @@ class Graph:
                 if self.live_plot:
                     self.data.update_plot(graph=self)
 
-                self.solve(next_node)
+                self.solve(next_food_item)
 
                 # Backtrack
-                self.backtrack(next_node, cost)
-
-                #print(f"Backtracking <-- :\t{self.current_path.path_list}")
+                self.backtrack(next_food_item, cost)
 
                 time.sleep(self.data.visual_delay)
 
@@ -85,8 +101,10 @@ class Graph:
             self.current_path.path_list.append(food_item.food_id)
             self.current_path.net_energy_gain -= cost
             self.current_path.net_energy_gain += food_item.energy
-        
 
+        if self.path_printing:
+            print(f"Moving Forward --> :\t{self.current_path.path_list}\n")
+        
     def backtrack(self, food_item: FoodItem, cost: float) -> None:
         """
         Backtracks the graph to explore different paths.
@@ -96,19 +114,23 @@ class Graph:
             self.current_path.net_energy_gain += cost
             self.current_path.path_list.remove(food_item.food_id)
             bisect.insort(self.remaining_food, food_item.food_id)
+        
+        if self.path_printing:
+            print(f"Backtracking <-- :\t{self.current_path.path_list}\n")
 
     def solver_find_min_energy(self, 
                                starting_energy: int = 1, 
-                               max_energy: int = 1000) -> int:
+                               max_energy: int = 100) -> int:
         """
-        Finds the minimum starting energy needed to complete a valid path.
+        Iteratively finds the minimum starting energy needed to complete a valid path
+        using the given bounds.
         """
         for energy in range(starting_energy, max_energy + 1):
             print(f"Trying energy: {energy} to start...")
             self.current_path.net_energy_gain = energy
-            self.solve(self.all_food_nodes[0])
+            self.solve(self.all_food_nodes[self.starting_node_index])
             if self.optimal_path.path_list:
-                print(f"✅ Found optimal path with {energy} energy: {self.optimal_path.path_list}")
+                print(f"\n✅ Found an optimal path with {energy} energy\n")
                 return energy
         return max_energy  # If no valid path is found, return max_energy set.
 
@@ -116,7 +138,8 @@ class Graph:
               starting_energy: int = 1, 
               max_energy: int = 1000) -> None:
         """
-        Initializes the graph, computes the optimal path, and writes the solution to a CSV file.
+        Initializes the graph, computes the optimal path, 
+        and writes the solution to a CSV file.
         """
         print("Searching for optimal path 🔎 ...\n")
 
@@ -136,14 +159,37 @@ class Graph:
         # Set minimum energy to the current path before solving
         self.current_path.net_energy_gain = self.min_energy_needed
 
-        # # Solve again with the computed minimum energy (Optional)
+        # # Solve again with the computed minimum energy (Testing)
         # self.solve(self.all_food_nodes[0], data, live_plot)
 
-        # Write the solution to a CSV file
-        self.write_solution_to_csv("solution.csv")
+    def read_csv_data(self):
+        """
+        Reads a CSV file containing food item data and populates 
+        the 'all_food_nodes' list with FoodItem objects.
 
-    def read_csv_data(self, filename : str):
-        with open(filename, 'r') as file:
+        The CSV file MUST include a header row followed by one row 
+        per food item. The expected header and corresponding data 
+        columns are as follows:
+
+            Node Number, X, Y, Z, Energy
+
+            <followed by your row-by-row, comma separated data>
+
+        where:
+            - Node Number: An integer that uniquely identifies the food item.
+            Node numbers start from 0 and increment by 1.
+            - X: A floating-point number representing the x-coordinate in the 3D space.
+            - Y: A floating-point number representing the y-coordinate in the 3D space.
+            - Z: A floating-point number representing the z-coordinate in the 3D space.
+            - Energy: An integer representing the energy value for the food item.
+
+        The function skips the header row and then reads each subsequent row, converting the string
+        values into the appropriate types before instantiating a FoodItem object.
+
+        Args:
+            filename (str): The path to the CSV file containing the food item data.
+        """
+        with open(self.data.input_data_file, 'r') as file:
             csv_reader = csv.reader(file)
             next(csv_reader)  # Skip header row
             for row in csv_reader:
@@ -154,8 +200,8 @@ class Graph:
                     float(row[3]),
                     int(row[4])))
     
-    def write_solution_to_csv(self, filename : str):
-        with open(filename, 'w', newline='') as file:
+    def write_solution_to_csv(self):
+        with open(self.data.output_data_file, 'w', newline='') as file:
             csv_writer = csv.writer(file)
             csv_writer.writerow(['Node Number', 'X', 'Y', 'Z','Energy',])
             for food_item in self.optimal_path.path_list:
@@ -175,11 +221,19 @@ class Graph:
     def initialize_remaining_food(self):
         """Ensure the first food item is set as the starting node."""
         self.remaining_food = [food.food_id for food in self.all_food_nodes]
-        
-    def results_print(self) -> None:    
-        print(f"Done! Finished in {self.solution_end_time - self.solution_start_time:.6f} seconds\n")
-        if(not self.optimal_path.path_list):
-            print("❌ No Optimal Path Found...\n")
+
+    def results_print(self) -> None:
+        elapsed_time = self.solution_end_time - self.solution_start_time
+        if not self.optimal_path.path_list:
+            results = (
+                f"Done! Finished in {elapsed_time:.6f} seconds\n\n"
+                f"❌ No Optimal Path Found...\n"
+                )
         else:
-            print(f"✅ Minimum Starting Gogurt Bars Needed To Finish: {self.min_energy_needed}\n") # Plus one since the min energy starts at 0.
-            print(f"✅ Optimal Path: {self.optimal_path}\n --- Finished Optimal Net Gogurt Bars: {self.optimal_path.net_energy_gain:.6f}\n")
+            results = (
+                f"Done! Finished in {elapsed_time:.6f} seconds\n\n"
+                f"✅ Minimum Starting Energy Needed To Solve: {self.min_energy_needed}\n"
+                f"✅ Optimal Path: {self.optimal_path}\n"
+                f"✅ Net Energy Remaining: {self.optimal_path.net_energy_gain:.6f}\n"
+                )
+        print(results)
