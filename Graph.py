@@ -91,29 +91,6 @@ class Graph:
                 if self.live_plot:
                     self.data.update_plot(graph=self)
 
-    """ Solve method without live plotting or printing """
-    # def solve(self, food_item: FoodItem) -> None:
-    #     """
-    #     Recursively explores paths and finds the optimal solution.
-
-    #     Args:
-    #         node (FoodItem): The current node being explored. 
-    #         Such as the starting food_item or the next food_item.
-    #     """
-    #     if not self.remaining_food:
-    #         self.update_optimal()
-    #         if self.optimal_update:
-    #             return
-
-    #     for food_id in list(self.remaining_food):
-    #         next_food_item = self.all_food_nodes[food_id]
-    #         cost = get_total_cost(food_item, next_food_item)
-
-    #         if self.current_path.net_energy_gain >= cost:
-    #             self.move_forward(next_food_item, cost)
-    #             self.solve(next_food_item)
-    #             self.backtrack(next_food_item, cost)
-
     def move_forward(self, food_item: FoodItem, cost: float) -> None:
         """
         Moves the graph forward by updating the current path, net energy gain, 
@@ -274,3 +251,41 @@ class Graph:
                 f"✅ Net Energy Remaining: {self.optimal_path.net_energy_gain:.6f}\n"
                 )
         print(results)
+
+    def run(self, num_points=5,
+        find_min=False, create_random_data=False,
+        starting_energy = 1, max_energy = 30,
+        x_lower_limit=0, x_upper_limit=10,
+        y_lower_limit=0, y_upper_limit=10,
+        z_lower_limit=0, z_upper_limit=5,
+        energy_lower_limit=1, energy_upper_limit=5):
+
+      # Wrap all the limit parameters into a dictionary
+      limits = {"xll": x_lower_limit, "xul": x_upper_limit,
+            "yll": y_lower_limit, "yul": y_upper_limit,
+            "zll": z_lower_limit, "zul": z_upper_limit,
+            "ell": energy_lower_limit, "eul": energy_upper_limit,}
+
+      if create_random_data:
+        self.data.create_random_data(num_points=num_points, **limits)
+
+      """ Read random data from default CSV file or user specified file """
+      self.read_csv_data(filename=self.data.input_data_file)
+      
+      """ Initialize remaining food list from data """
+      self.initialize_remaining_food()
+      
+      if self.is_valid_starting_node():
+        self.setup_solver(starting_energy=starting_energy, 
+                           max_energy=max_energy, find_min=find_min)
+        
+        self.write_solution_to_csv(filename=self.data.output_data_file)
+        self.results_print()
+        self.data.plot_solution()
+        self.data.show_final_plot()
+    
+      else:
+          print(
+            f"Invalid starting node index choice: {self.starting_node_index}.\n"
+            f"List of valid indices: {self.remaining_food}\n"
+            )
