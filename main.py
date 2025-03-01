@@ -1,27 +1,6 @@
 from graph import Graph
 
-# Set the keyword arguments for the random data generator
-KWARGS = {
-  "x_lower_limit": 0,
-  "x_upper_limit": 10,
-  "y_lower_limit": 0,
-  "y_upper_limit": 10,
-  "z_lower_limit": 0,
-  "z_upper_limit": 5,
-  "energy_lower_limit": 1,
-  "energy_upper_limit": 10
-  }
-
 if __name__ == "__main__":
-    graph = Graph(
-                seed=420,
-                starting_node_index=0,
-                live_plot=False,
-                path_printing=False, 
-                optimal_update=True,
-                input_file="test_cases_4.csv",
-                output_file="solution.csv"
-                )
     """
     ==================== Creating a Graph object ====================
 
@@ -39,51 +18,65 @@ if __name__ == "__main__":
       path when it is updated (Optional, default is False).
 
     - Set input_file to the filename of the CSV file containing the data 
-    (Optional, default is "random_coordinates_energy.csv").
+      (Optional, default is "random_coordinates_energy.csv").
 
     - Set output_file to the filename of the CSV file to write the solution to 
-    (Optional, default is "solution.csv").
+      (Optional, default is "solution.csv").
+      
     """
+    graph = Graph(
+                seed=420,
+                starting_node_index=0,
+                live_plot=False,
+                path_printing=False, 
+                optimal_update=False,
+                # input_file="<choose_file>.csv",
+                # output_file="<choose_file>.csv"
+                )
 
-    # Set the visual delay for plotting the graph (Optional, default is 0.005)
-    # graph.data.visual_delay = 0.0001
+    """ Manually set the visual delay for plotting the graph (Optional, default is 0.005) """
+    # graph.data.visual_delay = 0.01
     
-    # Generate random data and write to CSV.
-    # The number of points should be at least 3 more than the starting node 
-    # index to avoid index out of range errors and to form a graph path.
-    graph.data.create_random_data(num_points=12, **KWARGS)
+    """
+    Generate random data and write to CSV.
+    The number of points should be at least 3 more than the starting node 
+    index to form a decent graph path.
+    """
+    graph.data.create_random_data(num_points=8,
+                                  x_lower_limit=0, x_upper_limit=10,
+                                  y_lower_limit=0, y_upper_limit=10,
+                                  z_lower_limit=0, z_upper_limit=4,
+                                  energy_lower_limit=1, energy_upper_limit=5)
 
-    # Read random data from CSV file
-    graph.read_csv_data()
-
-    # Initialize remaining food list from data
+    """ Read random data from default CSV file or user specified file """
+    graph.read_csv_data(filename=None)
+    
+    """ Initialize remaining food list from data """
     graph.initialize_remaining_food()
+    
+    if graph.is_valid_starting_node():
+      
+      """
+      Run the graph setup with the starting energy, max energy, 
+      and find_min set to the user choice (or Default). find_min set to True 
+      will find the minimum energy path required for one solution (if possible 
+      within the constraints). Else if set to False it will use the starting 
+      energy to attempt to find a path.
+      """
+      graph.setup_solver(starting_energy=1, max_energy=30, find_min=True)
 
-    # Remove the chosen starting node from the remaining food list
-    if graph.starting_node_index in graph.remaining_food:
-
-        # Remove the starting node from the remaining food list
-        graph.remaining_food.remove(graph.starting_node_index)
-        
-        # Add the starting node to the path
-        graph.current_path.path_list.append(graph.starting_node_index)
-        
-        # Run solver with dynamic plotting, with bounds on starting energy and max energy
-        graph.setup(starting_energy=1,
-                    max_energy=50)
-
-        # Write the solution to a CSV file
-        graph.write_solution_to_csv()
-
-        # Print results to the console
-        graph.results_print()
-
-        # Plot the solution path to the graph
-        graph.data.plot_solution()
-
-        # Show the final plot of the solution
-        graph.data.show_final_plot()
-        
+      """
+      Write the solution to CSV, print results and plot the solution
+      Use default output file or user specified file in write_solution_to_csv
+      """
+      graph.write_solution_to_csv(filename=None)
+      graph.results_print()
+      graph.data.plot_solution()
+      graph.data.show_final_plot()
+    
     else:
-        # Print error message if the starting node index is invalid
-        print(f"Invalid starting node index: {graph.starting_node_index}")
+        """ Print error message if the starting node index is invalid """
+        print(
+          f"Invalid starting node index choice: {graph.starting_node_index}.\n"
+          f"List of valid indices: {graph.remaining_food}\n"
+          )

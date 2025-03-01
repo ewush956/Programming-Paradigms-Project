@@ -49,6 +49,9 @@ class Graph:
         self.optimal_update = optimal_update
         self.starting_node_index = starting_node_index
 
+    def is_valid_starting_node(self) -> bool:
+        return (self.starting_node_index in self.remaining_food)
+
     def solve(self, food_item: FoodItem) -> None:
         """
         Recursively explores paths and finds the optimal solution.
@@ -71,25 +74,45 @@ class Graph:
             cost = get_total_cost(food_item, next_food_item)
 
             if self.current_path.net_energy_gain >= cost:
-                # Move forward
+
                 self.move_forward(next_food_item, cost)
 
                 time.sleep(self.data.visual_delay)
 
-                # Update plot visually
                 if self.live_plot:
                     self.data.update_plot(graph=self)
 
                 self.solve(next_food_item)
 
-                # Backtrack
                 self.backtrack(next_food_item, cost)
 
                 time.sleep(self.data.visual_delay)
 
-                # Update plot visually
                 if self.live_plot:
                     self.data.update_plot(graph=self)
+
+    """ Solve method without live plotting or printing """
+    # def solve(self, food_item: FoodItem) -> None:
+    #     """
+    #     Recursively explores paths and finds the optimal solution.
+
+    #     Args:
+    #         node (FoodItem): The current node being explored. 
+    #         Such as the starting food_item or the next food_item.
+    #     """
+    #     if not self.remaining_food:
+    #         self.update_optimal()
+    #         if self.optimal_update:
+    #             return
+
+    #     for food_id in list(self.remaining_food):
+    #         next_food_item = self.all_food_nodes[food_id]
+    #         cost = get_total_cost(food_item, next_food_item)
+
+    #         if self.current_path.net_energy_gain >= cost:
+    #             self.move_forward(next_food_item, cost)
+    #             self.solve(next_food_item)
+    #             self.backtrack(next_food_item, cost)
 
     def move_forward(self, food_item: FoodItem, cost: float) -> None:
         """
@@ -134,9 +157,10 @@ class Graph:
                 return energy
         return max_energy  # If no valid path is found, return max_energy set.
 
-    def setup(self,
+    def setup_solver(self,
               starting_energy: int = 1, 
-              max_energy: int = 100) -> None:
+              max_energy: int = 100,
+              find_min : bool = True) -> None:
         """
         Initializes the graph, computes the optimal path, 
         and writes the solution to a CSV file.
@@ -145,24 +169,31 @@ class Graph:
 
         # Enable interactive mode for live updates (Optional)
         plt.ion()
+        
+        # Remove the starting node from the remaining food list
+        self.remaining_food.remove(self.starting_node_index)
+        
+        # Add the starting node to the path
+        self.current_path.path_list.append(self.starting_node_index)
 
         # Start timer and find the minimum starting energy
         self.solution_start_time = time.time()
         
         # Get the minimum energy needed to solve the problem by 
         # finding the optimal path with the least energy needed.
-        self.min_energy_needed = self.solver_find_min_energy(starting_energy,
-                                                             max_energy)
+        if find_min:
+            self.min_energy_needed = self.solver_find_min_energy(starting_energy, 
+                                                                 max_energy)
+        else:
+            # Alternative attempt to solve with just starting minimum energy
+            self.current_path.net_energy_gain = starting_energy
+            self.min_energy_needed = starting_energy
+            self.solve(self.all_food_nodes[self.starting_node_index])
+        
         # Stop timer
         self.solution_end_time = time.time()
 
-        # Set minimum energy to the current path before solving
-        self.current_path.net_energy_gain = self.min_energy_needed
-
-        # # Solve again with the computed minimum energy (Testing)
-        # self.solve(self.all_food_nodes[0], data, live_plot)
-
-    def read_csv_data(self):
+    def read_csv_data(self, filename: str = None) -> None:
         """
         Reads a CSV file containing food item data and populates 
         the 'all_food_nodes' list with FoodItem objects.
@@ -189,7 +220,10 @@ class Graph:
         Args:
             filename (str): The path to the CSV file containing the food item data.
         """
-        with open(self.data.input_data_file, 'r') as file:
+        if filename is None:
+            filename = self.data.input_data_file
+        
+        with open(filename, 'r') as file:
             csv_reader = csv.reader(file)
             next(csv_reader)  # Skip header row
             for row in csv_reader:
@@ -200,8 +234,11 @@ class Graph:
                     float(row[3]),
                     int(row[4])))
     
-    def write_solution_to_csv(self):
-        with open(self.data.output_data_file, 'w', newline='') as file:
+    def write_solution_to_csv(self, filename: str = None):
+        if filename is None:
+            filename = self.data.output_data_file
+        
+        with open(filename, 'w', newline='') as file:
             csv_writer = csv.writer(file)
             csv_writer.writerow(['Node Number', 'X', 'Y', 'Z','Energy',])
             for food_item in self.optimal_path.path_list:
