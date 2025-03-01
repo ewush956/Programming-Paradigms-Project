@@ -1,8 +1,5 @@
 # This is a Cartesian Plane Node.
 class FoodItem():
-    """
-    Represents a food item on a 3D Cartesian plane with an energy attribute.
-    """
     def __init__(self, 
                  food_id: int | None, 
                  x: float | None, 
@@ -10,7 +7,7 @@ class FoodItem():
                  z: float | None, 
                  energy: int | None) -> None:
         """
-        Initializes a FoodItem object with the given food_id, x, y, z, and energy.
+        Represents a food item on a 3D Cartesian plane with an energy attribute.
 
         Args:
             food_id: A positive integer (Any value >= 0) representing the food item's ID.

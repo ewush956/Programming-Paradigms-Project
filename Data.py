@@ -3,56 +3,101 @@ import random
 
 import matplotlib.pyplot as plt
 
-from Food_Item import FoodItem
+from food_item import FoodItem
 
 class Data:
     """
     The Data class is responsible for generating random food item data, reading solution data,
     and plotting the 3D solution using Matplotlib. It also contains interactive controls for
     rotating the 3D plot.
+
+    NOTE: This class is primarily only a part of the imperative project solution.
     """
-    def __init__(self, seed: int | None = None, filename : str = "random_coordinates_energy.csv" ):
-        # File names for input and solution data
-        self.input_file = filename
-        # File name for solution data
-        self.solution_file = "solution.csv"
+    def __init__(self, 
+                 seed: int | None = None, 
+                 starting_node: int = 0,
+                 input_data_file : str = "random_coordinates_energy.csv",
+                 output_data_file : str = "solution.csv") -> None:
+        
         # Set random seed for reproducibility
         random.seed(seed)
+
+        # Starting node index
+        self.starting_node = starting_node
+
+        # Input and output data file names
+        self.input_data_file = input_data_file
+        self.output_data_file = output_data_file
+
         # Data storage for solution visualization
         self.node_nums = []
+
         # Coordinates and energy values for each node
         self.x_coords = []
         self.y_coords = []
         self.z_coords = []
         self.energy = []
+
         # Matplotlib figure & interactive elements for 3D plot
         self.fig = None
+
         # Matplotlib axis for 3D plot
         self.ax = None
+
         # Event for 3D rotation (mouse press)
         self.start_event = None
+
         # Initial azimuth angle (rotation around z-axis)
-        self.start_azim = None       
+        self.start_azim = None   
+
         # Initial elevation angle (rotation around x-axis)
         self.start_elev = None
-        # Delay for visualizing edges in the 3D plot (in seconds)
-        self.visual_delay = 0.001
 
-    def generate_random_points(self, num_points: int):
+        # Delay for visualizing edges in the 3D plot (in seconds)
+        self.visual_delay = 0.005
+
+    def generate_random_points(self, 
+                               num_points: int,
+                               x_lower_limit: int = -10,
+                               x_upper_limit: int = 10,
+                               y_lower_limit: int = -10,
+                               y_upper_limit: int = 10,
+                               z_lower_limit: int = -10,
+                               z_upper_limit: int = 10,
+                               energy_lower_limit : int = 1,
+                               energy_upper_limit : int = 10) -> list[FoodItem]:
         """Generate random food item nodes with (x, y, z) coordinates and energy values."""
         points = []
         for i in range(num_points):
-            x = round(random.uniform(-10, 10), 0)
-            y = round(random.uniform(-10, 10), 0)
-            z = round(random.uniform(-10, 10), 0)
-            energy = random.randint(1, 10)
-            points.append(FoodItem(i, x, y, z, 0 if i == 0 else energy))
+            x = round(random.uniform(x_lower_limit, x_upper_limit))
+            y = round(random.uniform(y_lower_limit, y_upper_limit))
+            z = round(random.uniform(z_lower_limit, z_upper_limit))
+            energy = random.randint(energy_lower_limit, energy_upper_limit)
+            points.append(FoodItem(i, x, y, z, 0
+                                   if i == self.starting_node else energy))
         return points
 
-    def create_random_data(self, num_points=5):
+    def create_random_data(self, 
+                           num_points=5,                            
+                           x_lower_limit: int = -10,
+                           x_upper_limit: int = 10,
+                           y_lower_limit: int = -10,
+                           y_upper_limit: int = 10,
+                           z_lower_limit: int = -10,
+                           z_upper_limit: int = 10,
+                           energy_lower_limit : int = 1,
+                           energy_upper_limit : int = 10):
         """Create and save random food item data to a CSV file."""
-        points = self.generate_random_points(num_points)
-        with open(self.input_file, "w", newline="") as csvfile:
+        points = self.generate_random_points(num_points,                            
+                                             x_lower_limit,
+                                             x_upper_limit,
+                                             y_lower_limit,
+                                             y_upper_limit,
+                                             z_lower_limit,
+                                             z_upper_limit,
+                                             energy_lower_limit,
+                                             energy_upper_limit)
+        with open(file=self.input_data_file, mode="w", newline="") as csvfile:
             writer = csv.writer(csvfile)
             writer.writerow(["Node Number", "X", "Y", "Z", "Energy"])
             for food in points:
@@ -66,7 +111,7 @@ class Data:
         self.z_coords.clear()
         self.energy.clear()
         
-        with open(self.solution_file, mode='r', newline='') as file:
+        with open(file=self.output_data_file, mode='r', newline='') as file:
             reader = csv.DictReader(file)
             for row in reader:
                 self.node_nums.append(int(row['Node Number']))
@@ -75,19 +120,19 @@ class Data:
                 self.z_coords.append(float(row['Z']))
                 self.energy.append(int(row['Energy']))
 
-    def _plot_nodes(self, nodes, color='blue', alpha=0.5, size=50):
+    def _plot_nodes(self, nodes, color='blue', alpha=0.5, size=75):
         """Helper method to plot nodes."""
         x_all = [node.x for node in nodes]
         y_all = [node.y for node in nodes]
         z_all = [node.z for node in nodes]
         self.ax.scatter(x_all, y_all, z_all, c=color, alpha=alpha, s=size)
 
-    def _plot_edges(self, path_nodes, color='purple'):
+    def _plot_edges(self, path_nodes, color='black'):
         """Helper method to plot edges between nodes."""
         if len(path_nodes) > 1:
             for i in range(1, len(path_nodes)):
-                start_node = path_nodes[i - 1]
-                end_node = path_nodes[i]
+                start_node = path_nodes[i-1] # Previous node
+                end_node = path_nodes[i] # Next node
                 self.ax.plot(
                     [start_node.x, end_node.x],
                     [start_node.y, end_node.y],
@@ -95,10 +140,10 @@ class Data:
                     color=color,
                     marker='o'
                 )
-                plt.draw()
-                plt.pause(self.visual_delay)
+            plt.draw()
+            plt.pause(self.visual_delay)
 
-    def update_plot(self, graph, solved: bool = False):
+    def update_plot(self, graph):
         """Updates the 3D plot with all food nodes and progressively draws edges with a delay."""
         if self.fig is None:
             self.fig = plt.figure()
@@ -109,16 +154,13 @@ class Data:
         # Plot all food nodes
         self._plot_nodes(list(graph.all_food_nodes), 'blue', 0.5, 50)
 
-        # Retrieve the correct path nodes
+        # Label each node with its node number
+        for node in graph.all_food_nodes:
+            self.ax.text(node.x, node.y, node.z, f" {node.food_id} ", fontsize=12, color='black')
+
         path_nodes = (
-            [graph.all_food_nodes[node] for node in graph.optimal_path.path_list]
-            if solved else
             [graph.all_food_nodes[node] for node in graph.current_path.path_list]
         )
-
-        # Ensure the first node is always the starting node (food_id=0)
-        if path_nodes and path_nodes[0].food_id != graph.starting_node_index:
-            path_nodes.insert(0, graph.all_food_nodes[graph.starting_node_index])
 
         # Highlight the starting node in purple
         self._plot_nodes([graph.all_food_nodes[graph.starting_node_index]], color='purple', size=100)
@@ -130,7 +172,7 @@ class Data:
         plt.pause(self.visual_delay)
 
 
-    def plot_solution(self):
+    def plot_solution(self, filename: str = "solution.csv"):
         """Plot the 3D solution using Matplotlib with interactive controls."""
         self.read_solution_data()
         
@@ -138,11 +180,23 @@ class Data:
         self.ax = self.fig.add_subplot(1, 1, 1, projection='3d')
 
         # Scatter plot of food item nodes
-        sc = self.ax.scatter(self.x_coords, self.y_coords, self.z_coords, c=self.energy, cmap='autumn', marker='o', alpha=1, s=50)
+        sc = self.ax.scatter(self.x_coords, 
+                             self.y_coords, 
+                             self.z_coords, 
+                             c=self.energy, 
+                             cmap='cool', 
+                             marker='o', 
+                             alpha=1, 
+                             s=75)
 
         # Label each node with its node number
         for i in range(len(self.x_coords)):
-            self.ax.text(self.x_coords[i], self.y_coords[i], self.z_coords[i], f"{self.node_nums[i]}", fontsize=10, color='black')
+            self.ax.text(self.x_coords[i], 
+                         self.y_coords[i], 
+                         self.z_coords[i], 
+                         f" {self.node_nums[i]}", 
+                         fontsize=12, 
+                         color='black')
 
         # Plot connecting path (if applicable)
         self.ax.plot(self.x_coords, self.y_coords, self.z_coords, marker='', color='grey')

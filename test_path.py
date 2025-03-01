@@ -1,7 +1,7 @@
 import pytest
 
-from Path import Path
-from Food_Item import FoodItem
+from path import Path
+from food_item import FoodItem
 
 def test_path_creation():
     """Test FoodItem creation."""

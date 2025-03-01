@@ -1,23 +1,55 @@
 import pytest
 import os
 
-from Graph import Graph
-from Food_Item import FoodItem
-from Path import Path
+from graph import Graph
+from food_item import FoodItem
+from path import Path
+from data import Data
 
 
-# Test the Graph class initialization method to ensure it initializes correctly.
-def test_graph_initialization():
+# Test the Graph class default initialization method to ensure it initializes correctly.
+def test_graph_default_initialization():
     """Ensure Graph initializes correctly with empty attributes."""
     graph = Graph()
     assert isinstance(graph.optimal_path, Path)
     assert isinstance(graph.current_path, Path)
+    assert isinstance(graph.data, Data)
     assert isinstance(graph.remaining_food, list)
     assert isinstance(graph.all_food_nodes, list)
     assert graph.min_energy_needed == 0
     assert graph.solution_start_time == 0
     assert graph.solution_end_time == 0
+    assert graph.live_plot == False
+    assert graph.path_printing == False
+    assert graph.optimal_update == False
+    assert graph.starting_node_index == 0
+    assert graph.data.input_data_file == "random_coordinates_energy.csv"
+    assert graph.data.output_data_file == "solution.csv"
 
+# Test the Graph class custom initialization method to ensure it initializes correctly.
+def test_graph_custom_initialization():
+    """Ensure Graph initializes correctly with custom attributes."""
+    graph = Graph(seed=123,
+                  starting_node_index=1,
+                  live_plot=True,
+                  path_printing=True,
+                  optimal_update=True,
+                  input_file="test_data.csv",
+                  output_file="test_solution.csv")
+    assert isinstance(graph.optimal_path, Path)
+    assert isinstance(graph.current_path, Path)
+    assert isinstance(graph.data, Data)
+    assert isinstance(graph.remaining_food, list)
+    assert isinstance(graph.all_food_nodes, list)
+    assert graph.min_energy_needed == 0
+    assert graph.solution_start_time == 0
+    assert graph.solution_end_time == 0
+    assert graph.live_plot == True
+    assert graph.path_printing == True
+    assert graph.optimal_update == True
+    assert graph.starting_node_index == 1
+    assert graph.data.input_data_file == "test_data.csv"
+    assert graph.data.output_data_file == "test_solution.csv"
 
 # Test the Graph class read_csv_data method to ensure 
 # it reads CSV data correctly.
@@ -25,14 +57,14 @@ def test_read_csv_data_valid(tmp_path):
 
     # Define the CSV header for the CSV file
     csv_header = "Node Number,X,Y,Z,Energy"
+    
+    # Create a temporary CSV file to store the sample data for testing where
+    # tmp_path is the temporary directory used by pytest to store temporary files.
+    csv_file = tmp_path / "test_data.csv"
 
     # Create sample data for testing and changes are reflected in the entire test
     item1 = (0, 10.0, 20.0, 30.0, 60)
     item2 = (1, 15.0, 25.0, 35.0, 45)
-
-    # Create a temporary CSV file to store the sample data for testing where
-    # tmp_path is the temporary directory used by pytest to store temporary files.
-    csv_file = tmp_path / "graph_test_data.csv"
     
     # Correctly format CSV content using f-strings
     csv_content = f"{csv_header}\n" \
@@ -43,10 +75,10 @@ def test_read_csv_data_valid(tmp_path):
     csv_file.write_text(csv_content)
     
     # Initialize the Graph class. The first test passing ensures this works.
-    graph = Graph()
+    graph = Graph(input_file=csv_file)
     
     # Use the read_csv_data method to read the CSV data.
-    graph.read_csv_data(str(csv_file))  # Ensure passing as string path
+    graph.read_csv_data()
     
     # Check that the CSV data was read correctly
     assert len(graph.all_food_nodes) == 2
@@ -65,13 +97,17 @@ def test_write_solution_to_csv(tmp_path):
     
     # Define the CSV header for the CSV file
     csv_header = "Node Number,X,Y,Z,Energy"
+    
+    # Add the sample data to the optimal path list where tmp_path is the
+    # temporary directory used by pytest to store temporary files.
+    csv_file = tmp_path / "solution.csv"
 
     # Create sample data for testing and changes are reflected in the entire test
     item0 = FoodItem(0, 10.0, 20.0, 30.0, 40)
     item1 = FoodItem(1, 15.0, 25.0, 35.0, 45)
 
     # Initialize the Graph class. The first test passing ensures this works.
-    graph = Graph()
+    graph = Graph(output_file=csv_file)
 
     # Add FoodItems to all_food_nodes for csv writing
     graph.all_food_nodes = [item0, item1]
@@ -80,13 +116,9 @@ def test_write_solution_to_csv(tmp_path):
     # list is a list of node numbers. In this hypothetical case, the optimal
     # path list is [1, 0].
     graph.optimal_path.path_list = [1,0]
-
-    # Add the sample data to the optimal path list where tmp_path is the
-    # temporary directory used by pytest to store temporary files.
-    csv_file = tmp_path / "solution.csv"
     
     # Use the write_solution_to_csv method to write the optimal path to a CSV file.
-    graph.write_solution_to_csv(csv_file)
+    graph.write_solution_to_csv()
     
     # Read the output file using the read_text method from the Pathlib module
     # and store the content in the content variable.

@@ -1,7 +1,7 @@
 from math import sqrt
 from math import tanh
 
-from Food_Item import FoodItem
+from food_item import FoodItem
 
 
 def euclidean_distance(p1 : tuple, p2 : tuple):
@@ -14,7 +14,14 @@ def get_energy_cost(dist_r3 : float, scalar : float):
     return dist_r3 * scalar
 
 def get_total_cost(starting_node : FoodItem, target_node : FoodItem) -> int:
-    r2 = euclidean_distance((starting_node.x,starting_node.y), (target_node.x, target_node.y))
-    r3 = euclidean_distance((starting_node.x, starting_node.y, starting_node.z), (target_node.x, target_node.y, target_node.z))
-    scalar = get_scalar(r2, start=starting_node.z, final=target_node.z)
-    return get_energy_cost(r3, scalar)
+    d_2d = euclidean_distance((starting_node.x, starting_node.y), (target_node.x, target_node.y))
+    d_3d = euclidean_distance((starting_node.x, starting_node.y, starting_node.z), (target_node.x, target_node.y, target_node.z))
+    scalar = get_scalar(d_2d, start=starting_node.z, final=target_node.z)
+    return get_energy_cost(d_3d, scalar)
+
+# Tester code
+# if __name__ == "__main__":
+#     dist = 12.247449
+#     scalar = get_scalar(dist, 0, 10)
+#     print(scalar)
+#     print(dist * scalar)
