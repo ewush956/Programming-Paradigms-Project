@@ -151,6 +151,13 @@ class Data:
             self.ax = self.fig.add_subplot(1, 1, 1, projection='3d')
 
         self.ax.clear()
+        
+        # Set axis labels and title
+        self.ax.set_xlabel("X Axis", fontsize=12)
+        self.ax.set_ylabel("Y Axis", fontsize=12)
+        self.ax.set_zlabel("Z Axis", fontsize=12)
+        self.ax.set_title("3D Data Visualization", fontsize=14)
+        self.ax.grid(True)
 
         # Plot all food nodes
         self._plot_nodes(list(graph.all_food_nodes), 'blue', 0.5, 50)

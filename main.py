@@ -22,20 +22,20 @@ if __name__ == "__main__":
 
     - Set output_file to the filename of the CSV file to write the solution to 
       (Optional, default is "solution.csv").
-
     """
     graph = Graph(
-                seed=420,
+                seed=42069,
                 starting_node_index=0,
-                live_plot=True,
+                live_plot=False,
                 path_printing=False, 
                 optimal_update=False,
-                # input_file="test_cases_1.csv",
-                # output_file="solution_test_case1.csv"
+                input_file="random_coordinates_energy.csv",
+                output_file="solution.csv"
                 )
-
-    graph.run(num_points=5, 
+    
+    graph.run(num_points=11, 
         find_min=False, 
         create_random_data=True, 
-        starting_energy=50, 
-        max_energy=50)
+        starting_energy=7, 
+        max_energy=25)
+    
