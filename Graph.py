@@ -12,6 +12,7 @@ from proj_math import get_total_cost
 class Graph:
     def __init__(self, 
                  seed : int | None = None,
+                 visual_delay : float = 0.005,
                  starting_node_index : int = 0,
                  live_plot : bool = False,
                  path_printing : bool = False,
@@ -26,9 +27,11 @@ class Graph:
         current_path (which represents the current path being run in the problem).
 
         Args:
-            seed: Set random seed for reproducibility (default = None).
+            seed: Set random seed for reproducibility.
+            visual_delay: The delay between each step in the visualization.
             starting_node_index: The starting node id from the coordinates.
             live_plot: If you would like to see live plotting of the program.
+            path_printing: Prints the current path to the console.
             optimal_update: Print the current optimal path when it is updated.
             input_file: The CSV file containing the food item data.
             output_file: The CSV file to write the solution to.
@@ -36,6 +39,7 @@ class Graph:
         self.optimal_path = Path()
         self.current_path = Path()
         self.data = Data(seed=seed,
+                         visual_delay=visual_delay,
                          starting_node=starting_node_index,
                          input_data_file=input_file,
                          output_data_file=output_file)
@@ -74,22 +78,21 @@ class Graph:
             cost = get_total_cost(food_item, next_food_item)
 
             if self.current_path.net_energy_gain >= cost:
-
                 self.move_forward(next_food_item, cost)
-
                 time.sleep(self.data.visual_delay)
-
-                if self.live_plot:
-                    self.data.update_plot(graph=self)
-
+                self.pause_and_update()
                 self.solve(next_food_item)
-
                 self.backtrack(next_food_item, cost)
-
                 time.sleep(self.data.visual_delay)
-
-                if self.live_plot:
-                    self.data.update_plot(graph=self)
+                self.pause_and_update()
+                    
+    def pause_and_update(self) -> None:
+        """
+        Pauses execution for the visual delay and updates the plot if live plotting is enabled.
+        """
+        time.sleep(self.data.visual_delay)
+        if self.live_plot:
+            self.data.update_plot(graph=self)
 
     def move_forward(self, food_item: FoodItem, cost: float) -> None:
         """
@@ -146,13 +149,10 @@ class Graph:
 
         # Enable interactive mode for live updates (Optional)
         plt.ion()
-        
-        # Remove the starting node from the remaining food list
-        self.remaining_food.remove(self.starting_node_index)
-        
-        # Add the starting node to the path
-        self.current_path.path_list.append(self.starting_node_index)
 
+        # Prepare the starting state
+        self.prepare_starting_state()
+        
         # Start timer and find the minimum starting energy
         self.solution_start_time = time.time()
         
@@ -169,6 +169,12 @@ class Graph:
         
         # Stop timer
         self.solution_end_time = time.time()
+
+    def prepare_starting_state(self) -> None:
+        # Remove the starting node from the remaining food list
+        self.remaining_food.remove(self.starting_node_index)
+        # Add the starting node to the path
+        self.current_path.path_list.append(self.starting_node_index)
 
     def read_csv_data(self, filename: str = None) -> None:
         """

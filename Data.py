@@ -14,7 +14,8 @@ class Data:
     NOTE: This class is primarily only a part of the imperative project solution.
     """
     def __init__(self, 
-                 seed: int | None = None, 
+                 seed: int | None = None,
+                 visual_delay: float = 0.005, 
                  starting_node: int = 0,
                  input_data_file : str = "random_coordinates_energy.csv",
                  output_data_file : str = "solution.csv") -> None:
@@ -53,7 +54,7 @@ class Data:
         self.start_elev = None
 
         # Delay for visualizing edges in the 3D plot (in seconds)
-        self.visual_delay = 0.005
+        self.visual_delay = visual_delay
 
     def create_random_data(self, num_points=5,                            
                         **limits) -> None:
