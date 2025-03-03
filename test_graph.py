@@ -2,7 +2,7 @@ import pytest
 import os
 
 from graph import Graph
-from food_item import FoodItem
+from Food import FoodItem
 from path import Path
 from data import Data
 

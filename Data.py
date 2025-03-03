@@ -3,7 +3,7 @@ import random
 
 import matplotlib.pyplot as plt
 
-from food_item import FoodItem
+from Food import FoodItem
 
 class Data:
     """

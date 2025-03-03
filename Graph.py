@@ -4,9 +4,9 @@ import time
 
 import matplotlib.pyplot as plt
 
-from food_item import FoodItem
-from data import Data
-from path import Path
+from Food import FoodItem
+from Data import Data
+from Path import Path
 from proj_math import get_total_cost
 
 class Graph:
