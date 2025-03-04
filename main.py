@@ -8,13 +8,13 @@ if __name__ == "__main__":
                 live_plot=False,
                 path_printing=True, 
                 optimal_update=False,
-                input_file="random_coordinates_energy.csv",
+                input_file="test_cases_2.csv",
                 output_file="solution.csv"
                 )
 
-    graph.run(num_points=4, 
-        find_min=False, 
-        create_random_data=True, 
-        starting_energy=20, 
+    graph.run(num_points=5, 
+        find_min=False,
+        create_random_data=False, 
+        starting_energy=21, 
         max_energy=25)
     
