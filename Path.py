@@ -16,9 +16,6 @@ class Path():
 
     def __str__(self):
         return " --> ".join(str(node) for node in self.path_list)
-        # return " 🍆💦  ".join(str(node) for node in self.path_list)
-        #return " 👉😎👉  ".join(str(node) for node in self.path_list)
-        #return " 👉 ".join(str(node) for node in self.path_list)
     
         
     
