@@ -12,7 +12,7 @@ find a solution is at least 36.
                 live_plot=False,
                 path_printing=True, 
                 optimal_update=False,
-                input_file="test_cases_1.csv",
+                input_file=f"{TESTS_DIRECTORY}/1.csv",
                 output_file="solution.csv"
                 )
 
@@ -48,7 +48,7 @@ This results in a greater energy requirement of at least 22 energy to start.
                 live_plot=False,
                 path_printing=True, 
                 optimal_update=False,
-                input_file="test_cases_2.csv",
+                input_file=f"{TESTS_DIRECTORY}/2.csv",
                 output_file="solution.csv"
                 )
 
@@ -79,7 +79,7 @@ showing how little energy is needed to descend a gradient.
                 live_plot=False,
                 path_printing=True, 
                 optimal_update=False,
-                input_file="test_cases_3.csv",
+                input_file=f"{TESTS_DIRECTORY}/3.csv",
                 output_file="solution.csv"
                 )
 
@@ -110,7 +110,7 @@ The min energy required to traverse is 8.
                 live_plot=False,
                 path_printing=True, 
                 optimal_update=False,
-                input_file="test_cases_4.csv",
+                input_file=f"{TESTS_DIRECTORY}/4.csv",
                 output_file="solution.csv"
                 )
 
@@ -141,7 +141,7 @@ This method involves too much energy gain at each node,
                 live_plot=False,
                 path_printing=True, 
                 optimal_update=False,
-                input_file="test_cases_5.csv",
+                input_file=f"{TESTS_DIRECTORY}/5.csv",
                 output_file="solution.csv"
                 )
 

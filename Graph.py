@@ -12,7 +12,7 @@ from proj_math import get_total_cost
 class Graph:
     def __init__(self, 
                  seed : int | None = None,
-                 visual_delay : float = 0.005,
+                 visual_delay : float = 0.00001,
                  starting_node_index : int = 0,
                  live_plot : bool = False,
                  path_printing : bool = False,
