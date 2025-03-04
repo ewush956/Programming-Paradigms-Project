@@ -2,21 +2,20 @@ import csv
 import bisect
 import time
 
-import matplotlib.pyplot as plt
-
 from Food import FoodItem
 from Data import Data
 from Path import Path
 from proj_math import get_total_cost
 
 class Graph:
-    def __init__(self, 
+    
+    def __init__(self,
                  seed : int | None = None,
-                 visual_delay : float = 0.005,
+                 visual_delay : float = 0,
                  starting_node_index : int = 0,
-                 live_plot : bool = False,
                  path_printing : bool = False,
-                 optimal_update : bool = False,
+                 optimal_update = False,
+                 path_update : bool = False,
                  input_file : str = "random_coordinates_energy.csv",
                  output_file : str = "solution.csv") -> None:
         """
@@ -30,9 +29,9 @@ class Graph:
             seed: Set random seed for reproducibility.
             visual_delay: The delay between each step in the visualization.
             starting_node_index: The starting node id from the coordinates.
-            live_plot: If you would like to see live plotting of the program.
             path_printing: Prints the current path to the console.
             optimal_update: Print the current optimal path when it is updated.
+            path_update: Print the current full path found.
             input_file: The CSV file containing the food item data.
             output_file: The CSV file to write the solution to.
         """
@@ -48,9 +47,9 @@ class Graph:
         self.min_energy_needed: int = 0
         self.solution_start_time = 0
         self.solution_end_time = 0
-        self.live_plot = live_plot
         self.path_printing = path_printing
         self.optimal_update = optimal_update
+        self.path_update = path_update
         self.starting_node_index = starting_node_index
 
     def is_valid_starting_node(self) -> bool:
@@ -66,10 +65,10 @@ class Graph:
         """
         if not self.remaining_food:
             self.update_optimal()
-            if self.optimal_update:
+            if self.path_update:
                 print(
                     f"\nFound A Path: {self.current_path.path_list}\n"
-                    f"Net Energy Remaining: {self.current_path.net_energy_gain:.6f}\n"
+                    f"Net Energy Remaining: {self.current_path.net_energy_gain:.4f}\n"
                     )
             return
 
@@ -80,19 +79,10 @@ class Graph:
             if self.current_path.net_energy_gain >= cost:
                 self.move_forward(next_food_item, cost)
                 time.sleep(self.data.visual_delay)
-                self.pause_and_update()
                 self.solve(next_food_item)
                 self.backtrack(next_food_item, cost)
                 time.sleep(self.data.visual_delay)
-                self.pause_and_update()
-                    
-    def pause_and_update(self) -> None:
-        """
-        Pauses execution for the visual delay and updates the plot if live plotting is enabled.
-        """
-        time.sleep(self.data.visual_delay)
-        if self.live_plot:
-            self.data.update_plot(graph=self)
+    
 
     def move_forward(self, food_item: FoodItem, cost: float) -> None:
         """
@@ -107,7 +97,7 @@ class Graph:
 
         if self.path_printing:
             print(f"Moving Forward --> :\t{self.current_path.path_list}\n")
-        
+
     def backtrack(self, food_item: FoodItem, cost: float) -> None:
         """
         Backtracks the graph to explore different paths.
@@ -146,9 +136,6 @@ class Graph:
         and writes the solution to a CSV file.
         """
         print("Searching for optimal path 🔎 ...\n")
-
-        # Enable interactive mode for live updates (Optional)
-        plt.ion()
 
         # Prepare the starting state
         self.prepare_starting_state()
@@ -237,6 +224,12 @@ class Graph:
         if(self.current_path.net_energy_gain >= self.optimal_path.net_energy_gain):
             self.optimal_path.path_list = self.current_path.path_list[:]
             self.optimal_path.net_energy_gain = self.current_path.net_energy_gain 
+            if self.optimal_update:
+                print(
+                    f"\nCurrent Optimal Path: {self.optimal_path.path_list}\n"
+                    f"Net Energy Remaining: {self.optimal_path.net_energy_gain:.4f}\n"
+                    )
+                
     
     def initialize_remaining_food(self):
         """Ensure the first food item is set as the starting node."""
@@ -254,7 +247,7 @@ class Graph:
                 f"Done! Finished in {elapsed_time:.6f} seconds\n\n"
                 f"✅ Minimum Starting Energy Needed To Solve: {self.min_energy_needed}\n"
                 f"✅ Optimal Path: {self.optimal_path}\n"
-                f"✅ Net Energy Remaining: {self.optimal_path.net_energy_gain:.6f}\n"
+                f"✅ Net Energy Remaining: {self.optimal_path.net_energy_gain:.4f}\n"
                 )
         print(results)
 
@@ -287,8 +280,6 @@ class Graph:
         
         self.write_solution_to_csv(filename=self.data.output_data_file)
         self.results_print()
-        self.data.plot_solution()
-        self.data.show_final_plot()
     
       else:
           print(

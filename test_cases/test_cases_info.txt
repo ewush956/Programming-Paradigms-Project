@@ -9,10 +9,10 @@ find a solution is at least 36.
                 seed=42069,
                 visual_delay=0.05,
                 starting_node_index=0,
-                live_plot=False,
                 path_printing=True, 
                 optimal_update=False,
-                input_file="test_cases_1.csv",
+                path_update=False,
+                input_file=f"{TESTS_DIRECTORY}/1.csv",
                 output_file="solution.csv"
                 )
 
@@ -45,10 +45,10 @@ This results in a greater energy requirement of at least 22 energy to start.
                 seed=42069,
                 visual_delay=0.5,
                 starting_node_index=0,
-                live_plot=False,
                 path_printing=True, 
                 optimal_update=False,
-                input_file="test_cases_2.csv",
+                path_update=False,
+                input_file=f"{TESTS_DIRECTORY}/2.csv",
                 output_file="solution.csv"
                 )
 
@@ -76,10 +76,10 @@ showing how little energy is needed to descend a gradient.
                 seed=42069,
                 visual_delay=0.5,
                 starting_node_index=0,
-                live_plot=False,
                 path_printing=True, 
                 optimal_update=False,
-                input_file="test_cases_3.csv",
+                path_update=False,
+                input_file=f"{TESTS_DIRECTORY}/3.csv",
                 output_file="solution.csv"
                 )
 
@@ -107,10 +107,10 @@ The min energy required to traverse is 8.
                 seed=42069,
                 visual_delay=1,
                 starting_node_index=0,
-                live_plot=False,
                 path_printing=True, 
                 optimal_update=False,
-                input_file="test_cases_4.csv",
+                path_update=False,
+                input_file=f"{TESTS_DIRECTORY}/4.csv",
                 output_file="solution.csv"
                 )
 
@@ -138,10 +138,10 @@ This method involves too much energy gain at each node,
                 seed=42069,
                 visual_delay=0.05,
                 starting_node_index=0,
-                live_plot=False,
                 path_printing=True, 
                 optimal_update=False,
-                input_file="test_cases_5.csv",
+                path_update=False,
+                input_file=f"{TESTS_DIRECTORY}/5.csv",
                 output_file="solution.csv"
                 )
 
@@ -162,3 +162,42 @@ Node Number,X,Y,Z,Energy
 3,1,3,2,1
 4,9,3,3,1
 5,10,5,2,1
+
+
+------------------------------test_cases_6----------------------------------
+    graph = Graph(
+                seed=81285,
+                visual_delay=0.00,
+                starting_node_index=0,
+                path_printing=False, 
+                optimal_update=True,
+                path_update=False,
+                #input_file=f"{TESTS_DIRECTORY}/6.csv",
+                output_file="solution.csv"
+                )
+
+    graph.run(num_points=13, 
+        find_min=True,
+        create_random_data=True, 
+        starting_energy=1,
+        max_energy=50,
+        x_lower_limit=0, x_upper_limit=3,
+        y_lower_limit=0, y_upper_limit=3,
+        z_lower_limit=0, z_upper_limit=3,
+        energy_lower_limit=1, energy_upper_limit=3,
+        )
+
+Node Number,X,Y,Z,Energy
+0,2,3,2,0
+1,1,3,1,1
+2,1,1,0,3
+3,2,1,0,1
+4,3,2,1,2
+5,0,3,1,2
+6,3,3,1,2
+7,3,1,2,1
+8,3,1,2,1
+9,3,3,2,1
+10,2,3,3,3
+11,3,2,2,2
+12,1,1,2,3
