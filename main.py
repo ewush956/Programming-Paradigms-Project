@@ -14,7 +14,7 @@ if __name__ == "__main__":
                 output_file="solution.csv"
                 )
 
-    graph.run(num_points=12, 
+    graph.run(num_points=13, 
         find_min=True,
         create_random_data=True, 
         starting_energy=1,
@@ -22,5 +22,5 @@ if __name__ == "__main__":
         x_lower_limit=0, x_upper_limit=3,
         y_lower_limit=0, y_upper_limit=3,
         z_lower_limit=0, z_upper_limit=3,
-        energy_lower_limit=1, energy_upper_limit=5,
+        energy_lower_limit=1, energy_upper_limit=3,
         )
