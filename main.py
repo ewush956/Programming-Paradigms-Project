@@ -10,13 +10,13 @@ if __name__ == "__main__":
                 path_printing=False,
                 optimal_update=False,
                 path_update=False,
-                # input_file=f"{TESTS_DIRECTORY}/1.csv",
+                input_file=f"{TESTS_DIRECTORY}/2.csv",
                 output_file="solution.csv"
                 )
 
     graph.run(num_points=6, 
         find_min=True,
-        create_random_data=True, 
+        create_random_data=False, 
         starting_energy=1,
         max_energy=50,
         x_lower_limit=0, x_upper_limit=3,
