@@ -1,10 +1,9 @@
 from math import sqrt
 from math import tanh
-
 from Food import FoodItem
 
 
-def euclidean_distance(p1 : tuple, p2 : tuple):
+def euclidean_distance(p1 : tuple, p2 : tuple) -> float:
     return sqrt(sum((a - b)**2 for a, b in zip(p1, p2)))
 
 def get_scalar(dist_r2 : float, start : int, final : int) -> float:

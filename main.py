@@ -1,5 +1,6 @@
 from Graph import Graph
 
+TESTS_DIRECTORY = "./test_cases"
 if __name__ == "__main__":
     graph = Graph(
                 seed=42069,
@@ -8,7 +9,7 @@ if __name__ == "__main__":
                 live_plot=False,
                 path_printing=False, 
                 optimal_update=False,
-                input_file="test_cases_5.csv",
+                input_file=f"{TESTS_DIRECTORY}/5.csv",
                 output_file="solution.csv"
                 )
 
