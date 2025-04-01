@@ -16,6 +16,7 @@ class Graph:
                  starting_node_index : int = 0,
                  live_plot : bool = False,
                  path_printing : bool = False,
+                 show_final_graph : bool = False,
                  optimal_update : bool = False,
                  path_update : bool = False,
                  input_file : str = "random_coordinates_energy.csv",
@@ -38,6 +39,7 @@ class Graph:
             input_file: The CSV file containing the food item data.
             output_file: The CSV file to write the solution to.
         """
+        self.solution_count = 0
         self.optimal_path = Path()
         self.current_path = Path()
         self.data = Data(seed=seed,
@@ -51,6 +53,7 @@ class Graph:
         self.solution_start_time = 0
         self.solution_end_time = 0
         self.live_plot = live_plot
+        self.show_final_graph = show_final_graph
         self.path_printing = path_printing
         self.optimal_update = optimal_update
         self.path_update = path_update 
@@ -68,13 +71,15 @@ class Graph:
             Such as the starting food_item or the next food_item.
         """
         if not self.remaining_food:
+            self.solution_count += 1
             self.update_optimal()
             if self.path_update:
                 print(
                     f"\nFound A Path: {self.current_path.path_list}\n"
                     f"Net Energy Remaining: {self.current_path.net_energy_gain:.4f}\n"
                     )
-            return
+            return 
+            
 
         for food_id in list(self.remaining_food):
             next_food_item = self.all_food_nodes[food_id]
@@ -240,7 +245,7 @@ class Graph:
         if(self.current_path.net_energy_gain >= self.optimal_path.net_energy_gain):
             self.optimal_path.path_list = self.current_path.path_list[:]
             self.optimal_path.net_energy_gain = self.current_path.net_energy_gain 
-            if self.optimal_path:
+            if self.optimal_update:
                 print(
                     f"\nCurrent Optimal Path: {self.optimal_path.path_list}\n"
                     f"Net Energy Remaining: {self.optimal_path.net_energy_gain:.4f}\n"
@@ -260,6 +265,7 @@ class Graph:
         else:
             results = (
                 f"Done! Finished in {elapsed_time:.6f} seconds\n\n"
+                f"✅ Found {self.solution_count} solutions\n"
                 f"✅ Minimum Starting Energy Needed To Solve: {self.min_energy_needed}\n"
                 f"✅ Optimal Path: {self.optimal_path}\n"
                 f"✅ Net Energy Remaining: {self.optimal_path.net_energy_gain:.4f}\n"
@@ -295,8 +301,9 @@ class Graph:
         
         self.write_solution_to_csv(filename=self.data.output_data_file)
         self.results_print()
-        self.data.plot_solution()
-        self.data.show_final_plot()
+        if self.show_final_graph:
+            self.data.plot_solution()
+            self.data.show_final_plot()
     
       else:
           print(
