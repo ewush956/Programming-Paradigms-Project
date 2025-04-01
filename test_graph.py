@@ -1,10 +1,10 @@
 import pytest
 import os
 
-from graph import Graph
-from food_item import FoodItem
-from path import Path
-from data import Data
+from Graph import Graph
+from Food import FoodItem
+from Path import Path
+from Data import Data
 
 
 # Test the Graph class default initialization method to ensure it initializes correctly.

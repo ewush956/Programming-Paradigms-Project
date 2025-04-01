@@ -4,18 +4,21 @@ import time
 
 import matplotlib.pyplot as plt
 
-from food_item import FoodItem
-from data import Data
-from path import Path
+from Food import FoodItem
+from Data import Data
+from Path import Path
 from proj_math import get_total_cost
 
 class Graph:
     def __init__(self, 
                  seed : int | None = None,
+                 visual_delay : float = 0.00001,
                  starting_node_index : int = 0,
                  live_plot : bool = False,
                  path_printing : bool = False,
+                 show_final_graph : bool = False,
                  optimal_update : bool = False,
+                 path_update : bool = False,
                  input_file : str = "random_coordinates_energy.csv",
                  output_file : str = "solution.csv") -> None:
         """
@@ -26,16 +29,21 @@ class Graph:
         current_path (which represents the current path being run in the problem).
 
         Args:
-            seed: Set random seed for reproducibility (default = None).
+            seed: Set random seed for reproducibility.
+            visual_delay: The delay between each step in the visualization.
             starting_node_index: The starting node id from the coordinates.
             live_plot: If you would like to see live plotting of the program.
+            path_printing: Prints the current path to the console.
             optimal_update: Print the current optimal path when it is updated.
+            path_update: Print the current full path found.
             input_file: The CSV file containing the food item data.
             output_file: The CSV file to write the solution to.
         """
+        self.solution_count = 0
         self.optimal_path = Path()
         self.current_path = Path()
         self.data = Data(seed=seed,
+                         visual_delay=visual_delay,
                          starting_node=starting_node_index,
                          input_data_file=input_file,
                          output_data_file=output_file)
@@ -45,8 +53,10 @@ class Graph:
         self.solution_start_time = 0
         self.solution_end_time = 0
         self.live_plot = live_plot
+        self.show_final_graph = show_final_graph
         self.path_printing = path_printing
         self.optimal_update = optimal_update
+        self.path_update = path_update 
         self.starting_node_index = starting_node_index
 
     def is_valid_starting_node(self) -> bool:
@@ -61,58 +71,36 @@ class Graph:
             Such as the starting food_item or the next food_item.
         """
         if not self.remaining_food:
+            self.solution_count += 1
             self.update_optimal()
-            if self.optimal_update:
+            if self.path_update:
                 print(
                     f"\nFound A Path: {self.current_path.path_list}\n"
-                    f"Net Energy Remaining: {self.current_path.net_energy_gain:.6f}\n"
+                    f"Net Energy Remaining: {self.current_path.net_energy_gain:.4f}\n"
                     )
-            return
+            return 
+            
 
         for food_id in list(self.remaining_food):
             next_food_item = self.all_food_nodes[food_id]
             cost = get_total_cost(food_item, next_food_item)
 
             if self.current_path.net_energy_gain >= cost:
-
                 self.move_forward(next_food_item, cost)
-
                 time.sleep(self.data.visual_delay)
-
-                if self.live_plot:
-                    self.data.update_plot(graph=self)
-
+                self.pause_and_update()
                 self.solve(next_food_item)
-
                 self.backtrack(next_food_item, cost)
-
                 time.sleep(self.data.visual_delay)
-
-                if self.live_plot:
-                    self.data.update_plot(graph=self)
-
-    """ Solve method without live plotting or printing """
-    # def solve(self, food_item: FoodItem) -> None:
-    #     """
-    #     Recursively explores paths and finds the optimal solution.
-
-    #     Args:
-    #         node (FoodItem): The current node being explored. 
-    #         Such as the starting food_item or the next food_item.
-    #     """
-    #     if not self.remaining_food:
-    #         self.update_optimal()
-    #         if self.optimal_update:
-    #             return
-
-    #     for food_id in list(self.remaining_food):
-    #         next_food_item = self.all_food_nodes[food_id]
-    #         cost = get_total_cost(food_item, next_food_item)
-
-    #         if self.current_path.net_energy_gain >= cost:
-    #             self.move_forward(next_food_item, cost)
-    #             self.solve(next_food_item)
-    #             self.backtrack(next_food_item, cost)
+                self.pause_and_update()
+                    
+    def pause_and_update(self) -> None:
+        """
+        Pauses execution for the visual delay and updates the plot if live plotting is enabled.
+        """
+        time.sleep(self.data.visual_delay)
+        if self.live_plot:
+            self.data.update_plot(graph=self)
 
     def move_forward(self, food_item: FoodItem, cost: float) -> None:
         """
@@ -169,13 +157,10 @@ class Graph:
 
         # Enable interactive mode for live updates (Optional)
         plt.ion()
-        
-        # Remove the starting node from the remaining food list
-        self.remaining_food.remove(self.starting_node_index)
-        
-        # Add the starting node to the path
-        self.current_path.path_list.append(self.starting_node_index)
 
+        # Prepare the starting state
+        self.prepare_starting_state()
+        
         # Start timer and find the minimum starting energy
         self.solution_start_time = time.time()
         
@@ -192,6 +177,12 @@ class Graph:
         
         # Stop timer
         self.solution_end_time = time.time()
+
+    def prepare_starting_state(self) -> None:
+        # Remove the starting node from the remaining food list
+        self.remaining_food.remove(self.starting_node_index)
+        # Add the starting node to the path
+        self.current_path.path_list.append(self.starting_node_index)
 
     def read_csv_data(self, filename: str = None) -> None:
         """
@@ -254,6 +245,11 @@ class Graph:
         if(self.current_path.net_energy_gain >= self.optimal_path.net_energy_gain):
             self.optimal_path.path_list = self.current_path.path_list[:]
             self.optimal_path.net_energy_gain = self.current_path.net_energy_gain 
+            if self.optimal_update:
+                print(
+                    f"\nCurrent Optimal Path: {self.optimal_path.path_list}\n"
+                    f"Net Energy Remaining: {self.optimal_path.net_energy_gain:.4f}\n"
+                )
     
     def initialize_remaining_food(self):
         """Ensure the first food item is set as the starting node."""
@@ -269,8 +265,48 @@ class Graph:
         else:
             results = (
                 f"Done! Finished in {elapsed_time:.6f} seconds\n\n"
+                f"✅ Found {self.solution_count} solutions\n"
                 f"✅ Minimum Starting Energy Needed To Solve: {self.min_energy_needed}\n"
                 f"✅ Optimal Path: {self.optimal_path}\n"
-                f"✅ Net Energy Remaining: {self.optimal_path.net_energy_gain:.6f}\n"
+                f"✅ Net Energy Remaining: {self.optimal_path.net_energy_gain:.4f}\n"
                 )
         print(results)
+
+    def run(self, num_points=5,
+        find_min=False, create_random_data=False,
+        starting_energy = 1, max_energy = 30,
+        x_lower_limit=0, x_upper_limit=10,
+        y_lower_limit=0, y_upper_limit=10,
+        z_lower_limit=0, z_upper_limit=5,
+        energy_lower_limit=1, energy_upper_limit=5):
+
+      # Wrap all the limit parameters into a dictionary
+      limits = {"xll": x_lower_limit, "xul": x_upper_limit,
+            "yll": y_lower_limit, "yul": y_upper_limit,
+            "zll": z_lower_limit, "zul": z_upper_limit,
+            "ell": energy_lower_limit, "eul": energy_upper_limit,}
+
+      if create_random_data:
+        self.data.create_random_data(num_points=num_points, **limits)
+
+      """ Read random data from default CSV file or user specified file """
+      self.read_csv_data(filename=self.data.input_data_file)
+      
+      """ Initialize remaining food list from data """
+      self.initialize_remaining_food()
+      
+      if self.is_valid_starting_node():
+        self.setup_solver(starting_energy=starting_energy, 
+                           max_energy=max_energy, find_min=find_min)
+        
+        self.write_solution_to_csv(filename=self.data.output_data_file)
+        self.results_print()
+        if self.show_final_graph:
+            self.data.plot_solution()
+            self.data.show_final_plot()
+    
+      else:
+          print(
+            f"Invalid starting node index choice: {self.starting_node_index}.\n"
+            f"List of valid indices: {self.remaining_food}\n"
+            )

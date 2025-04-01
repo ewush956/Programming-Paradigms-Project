@@ -3,7 +3,7 @@ import random
 
 import matplotlib.pyplot as plt
 
-from food_item import FoodItem
+from Food import FoodItem
 
 class Data:
     """
@@ -14,7 +14,8 @@ class Data:
     NOTE: This class is primarily only a part of the imperative project solution.
     """
     def __init__(self, 
-                 seed: int | None = None, 
+                 seed: int | None = None,
+                 visual_delay: float = 0.005, 
                  starting_node: int = 0,
                  input_data_file : str = "random_coordinates_energy.csv",
                  output_data_file : str = "solution.csv") -> None:
@@ -28,8 +29,7 @@ class Data:
         # Input and output data file names
         self.input_data_file = input_data_file
         self.output_data_file = output_data_file
-
-        # Data storage for solution visualization
+            # Data storage for solution visualization
         self.node_nums = []
 
         # Coordinates and energy values for each node
@@ -54,55 +54,57 @@ class Data:
         self.start_elev = None
 
         # Delay for visualizing edges in the 3D plot (in seconds)
-        self.visual_delay = 0.005
+        self.visual_delay = visual_delay
 
-    def generate_random_points(self, 
-                               num_points: int,
-                               x_lower_limit: int = -10,
-                               x_upper_limit: int = 10,
-                               y_lower_limit: int = -10,
-                               y_upper_limit: int = 10,
-                               z_lower_limit: int = -10,
-                               z_upper_limit: int = 10,
-                               energy_lower_limit : int = 1,
-                               energy_upper_limit : int = 10) -> list[FoodItem]:
-        """Generate random food item nodes with (x, y, z) coordinates and energy values."""
-        points = []
-        for i in range(num_points):
-            x = round(random.uniform(x_lower_limit, x_upper_limit))
-            y = round(random.uniform(y_lower_limit, y_upper_limit))
-            z = round(random.uniform(z_lower_limit, z_upper_limit))
-            energy = random.randint(energy_lower_limit, energy_upper_limit)
-            points.append(FoodItem(i, x, y, z, 0
-                                   if i == self.starting_node else energy))
-        return points
+    def create_random_data(self, num_points=5,                            
+                        **limits) -> None:
+        """
+        Create and save random food item data to a CSV file.
 
-    def create_random_data(self, 
-                           num_points=5,                            
-                           x_lower_limit: int = -10,
-                           x_upper_limit: int = 10,
-                           y_lower_limit: int = -10,
-                           y_upper_limit: int = 10,
-                           z_lower_limit: int = -10,
-                           z_upper_limit: int = 10,
-                           energy_lower_limit : int = 1,
-                           energy_upper_limit : int = 10):
+        Parameters:
+        num_points (int): The number of food items (nodes) to generate.
+        
+        x_lower_limit (int): Lower bound for the x-coordinate (Default: -10).
+        x_upper_limit (int): Upper bound for the x-coordinate (Default: 10).
+        
+        y_lower_limit (int): Lower bound for the y-coordinate (Default: -10).
+        y_upper_limit (int): Upper bound for the y-coordinate (Default: 10).
+        
+        z_lower_limit (int): Lower bound for the z-coordinate (Default: -10).
+        z_upper_limit (int): Upper bound for the z-coordinate (Default: 10).
+        
+        energy_lower_limit (int): Lower bound for the energy value (Default: 1).
+        energy_upper_limit (int): Upper bound for the energy value (Default: 10).
+
+        Returns:
+        None. The generated data is written to the configured CSV file.
+        """
+        
         """Create and save random food item data to a CSV file."""
-        points = self.generate_random_points(num_points,                            
-                                             x_lower_limit,
-                                             x_upper_limit,
-                                             y_lower_limit,
-                                             y_upper_limit,
-                                             z_lower_limit,
-                                             z_upper_limit,
-                                             energy_lower_limit,
-                                             energy_upper_limit)
+        points = self.generate_random_points(num_points, **limits)
+        
         with open(file=self.input_data_file, mode="w", newline="") as csvfile:
             writer = csv.writer(csvfile)
             writer.writerow(["Node Number", "X", "Y", "Z", "Energy"])
             for food in points:
                 writer.writerow([food.food_id, food.x, food.y, food.z, food.energy])
-
+    
+    def generate_random_points(self, 
+                               num_points: int,
+                               **limits) -> list[FoodItem]:
+        """ Generate random food item data points. Set energy upper and lower limits. """
+        points = []
+        for i in range(num_points):
+            x = round(random.uniform(limits['xll'], limits['xul']))
+            y = round(random.uniform(limits['yll'], limits['yul']))
+            z = round(random.uniform(limits['zll'], limits['zul']))
+            energy = random.randint(limits['ell'], limits['eul'])
+            """Append the food item to the list of points. 
+            Set energy to 0 for the starting node."""
+            points.append(FoodItem(i, x, y, z, 0
+                                   if i == self.starting_node else energy))
+        return points
+    
     def read_solution_data(self):
         """Read the solution file and store node numbers and coordinates."""
         self.node_nums.clear()
@@ -150,6 +152,13 @@ class Data:
             self.ax = self.fig.add_subplot(1, 1, 1, projection='3d')
 
         self.ax.clear()
+        
+        # Set axis labels and title
+        self.ax.set_xlabel("X Axis", fontsize=12)
+        self.ax.set_ylabel("Y Axis", fontsize=12)
+        self.ax.set_zlabel("Z Axis", fontsize=12)
+        self.ax.set_title("3D Data Visualization", fontsize=14)
+        self.ax.grid(True)
 
         # Plot all food nodes
         self._plot_nodes(list(graph.all_food_nodes), 'blue', 0.5, 50)

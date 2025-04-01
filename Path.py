@@ -1,4 +1,4 @@
-from food_item import FoodItem
+from Food import FoodItem
 
 class Path():
     def __init__(self):
@@ -16,9 +16,6 @@ class Path():
 
     def __str__(self):
         return " --> ".join(str(node) for node in self.path_list)
-        # return " 🍆💦  ".join(str(node) for node in self.path_list)
-        #return " 👉😎👉  ".join(str(node) for node in self.path_list)
-        #return " 👉 ".join(str(node) for node in self.path_list)
     
         
     

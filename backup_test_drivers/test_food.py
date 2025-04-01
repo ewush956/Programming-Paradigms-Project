@@ -1,6 +1,10 @@
 # Example usage:
 import math
-
+'''
+NOTE: This is an early version of our project, we decided
+to keep it in here to show our incremental approach to testing. This
+has since been automated and put in the test driver.
+'''
 class FoodItem:
     def __init__(self, item_id: int, x: float, y: float, z: float, energy: float):
         self.item_id = item_id   # Unique identifier for the food item

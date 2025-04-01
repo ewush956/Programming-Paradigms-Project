@@ -1,6 +1,6 @@
 import pytest
 
-from food_item import FoodItem
+from Food import FoodItem
 
 # Test the creation of a FoodItem object with valid inputs.
 def test_food_item_creation_integers_positive():

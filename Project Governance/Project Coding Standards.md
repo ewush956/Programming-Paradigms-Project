@@ -52,7 +52,6 @@ from mymodule import myfunction
 | Constants | UPPERCASE\_WITH\_UNDERSCORES | `MAX_RETRIES = 5` |
 | Functions | lowercase\_with\_underscores | `def calculate_total():` |
 | Classes | CamelCase | `class DataProcessor:` |
-| Module Names | lowercase snakecase | `my_module.py` |
 
 
 <br></br>
