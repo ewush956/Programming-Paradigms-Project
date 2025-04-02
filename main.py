@@ -49,6 +49,7 @@ def main():
         output_file=args.output_file
     )
     try: 
+        print("iunput file", args.input_file)
         graph.run(
             num_points=args.num_points,
             find_min=args.find_min,

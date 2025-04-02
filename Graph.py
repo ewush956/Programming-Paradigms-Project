@@ -171,7 +171,7 @@ class Graph:
                                                                  max_energy)
         else:
             # Alternative attempt to solve with just starting minimum energy
-            self.current_path.net_energy_gain = starting_energy
+            self.current_path.net_energy_gain = self.all_food_nodes[0].energy
             self.min_energy_needed = starting_energy
             self.solve(self.all_food_nodes[self.starting_node_index])
         
@@ -214,16 +214,25 @@ class Graph:
         if filename is None:
             filename = self.data.input_data_file
         
-        with open(filename, 'r') as file:
-            csv_reader = csv.reader(file)
-            next(csv_reader)  # Skip header row
-            for row in csv_reader:
-                self.all_food_nodes.append(
-                    FoodItem(int(row[0]),
-                    float(row[1]),
-                    float(row[2]),
-                    float(row[3]),
-                    int(row[4])))
+        try:
+            with open(filename, 'r') as file:
+                csv_reader = csv.reader(file)
+                next(csv_reader)  # Skip header row
+                for row in csv_reader:
+                    self.all_food_nodes.append(
+                        FoodItem(int(row[0]),
+                                float(row[1]),
+                                float(row[2]),
+                                float(row[3]),
+                                int(row[4])))
+        except FileNotFoundError:
+            print(f"Error: The file '{filename}' was not found.")
+        except ValueError as e:
+            print(f"Error: Invalid data format in file '{filename}'. {e}")
+        except Exception as e:
+            print(f"An unexpected error occurred while reading the file '{filename}': {e}")
+        finally:
+            print(f"Finished attempting to read the file '{filename}'.")
     
     def write_solution_to_csv(self, filename: str = None):
         if filename is None:
