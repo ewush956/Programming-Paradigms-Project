@@ -39,6 +39,7 @@ class Graph:
             input_file: The CSV file containing the food item data.
             output_file: The CSV file to write the solution to.
         """
+        self.valid = True
         self.solution_count = 0
         self.optimal_path = Path()
         self.current_path = Path()
@@ -211,9 +212,6 @@ class Graph:
         Args:
             filename (str): The path to the CSV file containing the food item data.
         """
-        if filename is None:
-            filename = self.data.input_data_file
-        
         try:
             with open(filename, 'r') as file:
                 csv_reader = csv.reader(file)
@@ -226,7 +224,14 @@ class Graph:
                                 float(row[3]),
                                 int(row[4])))
         except FileNotFoundError:
-            print(f"Error: The file '{filename}' was not found.")
+            self.valid = False
+            if filename == '':
+                #self.valid = False
+                print("\nNo File specified, provide a file directory")
+                print(r'python .\main.py --input_file ".\test_cases\file_name.csv" ')
+                print("or use --create_random_data to generate random data\n")
+            else:
+                print(f"Error: The file '{filename}' was not found.")
         except ValueError as e:
             print(f"Error: Invalid data format in file '{filename}'. {e}")
         except Exception as e:
@@ -296,9 +301,11 @@ class Graph:
             "ell": energy_lower_limit, "eul": energy_upper_limit,}
 
       if create_random_data:
+        print("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
+        self.data.input_data_file = "create_random_data.csv"
         self.data.create_random_data(num_points=num_points, **limits)
-
-      """ Read random data from default CSV file or user specified file """
+      
+        """ Read random data from default CSV file or user specified file """
       self.read_csv_data(filename=self.data.input_data_file)
       
       """ Initialize remaining food list from data """
@@ -313,9 +320,3 @@ class Graph:
         if self.show_final_graph:
             self.data.plot_solution()
             self.data.show_final_plot()
-    
-      else:
-          print(
-            f"Invalid starting node index choice: {self.starting_node_index}.\n"
-            f"List of valid indices: {self.remaining_food}\n"
-            )

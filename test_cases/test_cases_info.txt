@@ -5,27 +5,7 @@
 This test runs through a regular seeded plot, where the calculated min energy needed to 
 find a solution is at least 36.
 
-    graph = Graph(
-                seed=42069,
-                visual_delay=0.05,
-                starting_node_index=0,
-                live_plot=False,
-                path_printing=True, 
-                optimal_update=False,
-                input_file=f"{TESTS_DIRECTORY}/1.csv",
-                output_file="solution.csv"
-                )
-
-    graph.run(num_points=6, 
-        find_min=True,
-        create_random_data=False, 
-        starting_energy=34,
-        max_energy=36,
-        x_lower_limit=0, x_upper_limit=3,
-        y_lower_limit=0, y_upper_limit=3,
-        z_lower_limit=0, z_upper_limit=3,
-        energy_lower_limit=10, energy_upper_limit=20,
-        )
+python .\main.py --input_file "test_cases/1.csv"
 
 Node Number,X,Y,Z,Energy
 0,7.0,7.0,-8.0,0
@@ -41,27 +21,7 @@ the cost to move is just above 12 based on the Euclidean distance calculation.
 With our gradient scalar, it is amplified for uphill movement. 
 This results in a greater energy requirement of at least 22 energy to start.
 
-    graph = Graph(
-                seed=42069,
-                visual_delay=0.5,
-                starting_node_index=0,
-                live_plot=False,
-                path_printing=True, 
-                optimal_update=False,
-                input_file=f"{TESTS_DIRECTORY}/2.csv",
-                output_file="solution.csv"
-                )
-
-    graph.run(num_points=6, 
-        find_min=True,
-        create_random_data=False, 
-        starting_energy=20,
-        max_energy=23,
-        x_lower_limit=0, x_upper_limit=3,
-        y_lower_limit=0, y_upper_limit=3,
-        z_lower_limit=0, z_upper_limit=3,
-        energy_lower_limit=10, energy_upper_limit=20,
-        )
+python .\main.py --input_file "test_cases/2.csv"
 
 Node Number,X,Y,Z,Energy
 0,0,0,0,0
@@ -72,27 +32,8 @@ Node Number,X,Y,Z,Energy
 This is the inverse of test_cases_2, 
 showing how little energy is needed to descend a gradient.
 
-    graph = Graph(
-                seed=42069,
-                visual_delay=0.5,
-                starting_node_index=0,
-                live_plot=False,
-                path_printing=True, 
-                optimal_update=False,
-                input_file=f"{TESTS_DIRECTORY}/3.csv",
-                output_file="solution.csv"
-                )
+python .\main.py --input_file "test_cases/3.csv"
 
-    graph.run(num_points=6, 
-        find_min=True,
-        create_random_data=False, 
-        starting_energy=1,
-        max_energy=23,
-        x_lower_limit=0, x_upper_limit=3,
-        y_lower_limit=0, y_upper_limit=3,
-        z_lower_limit=0, z_upper_limit=3,
-        energy_lower_limit=10, energy_upper_limit=20,
-        )
 
 Node Number,X,Y,Z,Energy
 0,5,5,10,0
@@ -103,27 +44,7 @@ This test involves showcasing same plane, no gradient, calculation.
 The Euclidean distance of the same plane is equal to the energy cost (cost == 7.071)
 The min energy required to traverse is 8.
 
-    graph = Graph(
-                seed=42069,
-                visual_delay=1,
-                starting_node_index=0,
-                live_plot=False,
-                path_printing=True, 
-                optimal_update=False,
-                input_file=f"{TESTS_DIRECTORY}/4.csv",
-                output_file="solution.csv"
-                )
-
-    graph.run(num_points=6, 
-        find_min=True,
-        create_random_data=False, 
-        starting_energy=1,
-        max_energy=23,
-        x_lower_limit=0, x_upper_limit=3,
-        y_lower_limit=0, y_upper_limit=3,
-        z_lower_limit=0, z_upper_limit=3,
-        energy_lower_limit=10, energy_upper_limit=20,
-        )
+python .\main.py --input_file "test_cases/4.csv"
 
 Node Number,X,Y,Z,Energy
 0,5,5,5,0
@@ -134,26 +55,8 @@ This method involves too much energy gain at each node,
  and a high starting energy, resulting in effectively a worse case 
  scenario brute force method.
 
-    graph = Graph(
-                seed=42069,
-                visual_delay=0.05,
-                starting_node_index=0,
-                live_plot=False,
-                path_printing=True, 
-                optimal_update=False,
-                input_file=f"{TESTS_DIRECTORY}/5.csv",
-                output_file="solution.csv"
-                )
+python .\main.py --input_file "test_cases/5.csv"
 
-    graph.run(num_points=6, 
-        find_min=True,
-        create_random_data=True, 
-        starting_energy=25,
-        x_lower_limit=0, x_upper_limit=3,
-        y_lower_limit=0, y_upper_limit=3,
-        z_lower_limit=0, z_upper_limit=3,
-        energy_lower_limit=10, energy_upper_limit=20,
-        max_energy=50)
 
 Node Number,X,Y,Z,Energy
 0,0,2,1,0
@@ -165,28 +68,8 @@ Node Number,X,Y,Z,Energy
 
 ------------------------------test_cases_6----------------------------------
 
-    graph = Graph(
-                seed=81285,
-                visual_delay=0.00,
-                starting_node_index=0,
-                live_plot=False,
-                path_printing=False, 
-                optimal_update=True,
-                path_update=False,
-                input_file=f"{TESTS_DIRECTORY}/6.csv",
-                output_file="solution.csv"
-                )
+python .\main.py --input_file "test_cases/6.csv"
 
-    graph.run(num_points=13, 
-        find_min=True,
-        create_random_data=False, 
-        starting_energy=1,
-        max_energy=50,
-        x_lower_limit=0, x_upper_limit=3,
-        y_lower_limit=0, y_upper_limit=3,
-        z_lower_limit=0, z_upper_limit=3,
-        energy_lower_limit=1, energy_upper_limit=3,
-        )
 
 Node Number,X,Y,Z,Energy
 0,2,3,2,0
@@ -203,8 +86,8 @@ Node Number,X,Y,Z,Energy
 11,3,2,2,2
 12,1,1,2,3
 
-------------------------------test_cases_6----------------------------------
-Test case should find
+------------------------------test_cases_7----------------------------------
+
 python .\main.py --input_file "test_cases/7.csv"
 
 Node Number,X,Y,Z,Energy
@@ -218,8 +101,35 @@ Node Number,X,Y,Z,Energy
 7, 3,3,3,2
 8, 6,7,8,5
 
+------------------------------test_cases_noSolution----------------------------------
+Test case should find no solutions
+python .\main.py --input_file "test_cases/noSolution.csv"
+
 Node Number,X,Y,Z,Energy
 0, 0, 0, 0, 10
+1, 10, 0, 0, 10
+2, 10, 10, 0, 20
+3, 10, 10, 10, 10
+4, 0, 10, 10, 5
+5, 0, 0, 10, 10
+
+------------------------------test_cases_multiSolutions----------------------------------
+Test case should find sevral solutions
+python .\main.py --input_file "test_cases/multiSolutions.csv"
+
+Node Number,X,Y,Z,Energy
+0,0,0,0,5
+1,1,0,0,2
+2,0,1,0,2
+3,1,1,0,2
+4,2,0,0,2
+
+------------------------------test_cases_oneSolution----------------------------------
+Test case should find a single solution
+python .\main.py --input_file "test_cases/oneSolutions.csv"
+
+Node Number,X,Y,Z,Energy
+0, 0, 0, 0, 12
 1, 10, 0, 0, 10
 2, 10, 10, 0, 20
 3, 10, 10, 10, 10

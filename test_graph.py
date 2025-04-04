@@ -78,7 +78,7 @@ def test_read_csv_data_valid(tmp_path):
     graph = Graph(input_file=csv_file)
     
     # Use the read_csv_data method to read the CSV data.
-    graph.read_csv_data()
+    graph.read_csv_data(csv_file)
     
     # Check that the CSV data was read correctly
     assert len(graph.all_food_nodes) == 2

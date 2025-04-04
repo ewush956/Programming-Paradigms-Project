@@ -99,10 +99,7 @@ class Data:
             y = round(random.uniform(limits['yll'], limits['yul']))
             z = round(random.uniform(limits['zll'], limits['zul']))
             energy = random.randint(limits['ell'], limits['eul'])
-            """Append the food item to the list of points. 
-            Set energy to 0 for the starting node."""
-            points.append(FoodItem(i, x, y, z, 0
-                                   if i == self.starting_node else energy))
+            points.append(FoodItem(i, x, y, z, energy))
         return points
     
     def read_solution_data(self):

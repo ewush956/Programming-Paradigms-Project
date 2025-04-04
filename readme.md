@@ -1,6 +1,7 @@
 ### Dependancies 
+Install `pip` on your machine if you have not already done so.
 run `pip install matplotlib` For live plotting and final graph.
-run `pip install pytest` For running the test driver.
+run `pip install pytest` (Only for running the test driver.)
 
 ### How to run the program
 run `python .\main.py` after installing required dependancies either locally or in a virtual environment.
