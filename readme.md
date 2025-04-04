@@ -1,3 +1,15 @@
+## Overview of the Problem
+
+This project implements a **pathfinding algorithm** where the traversal between nodes is constrained by **available energy**. The nodes are represented in a 3D cartesian space, and the cost of moving between nodes is determined by a combination of:
+- **Euclidean distance** between nodes.
+- A **gradient scalar** based on the z-axis difference constrained between the values on the open interval (0,2).
+
+The goal is to find valid paths through the graph, ensuring that the energy constraints are met. The program can handle cases with:
+- No solutions.
+- One solution.
+- Multiple solutions.
+- Invalid User input.
+
 ### Dependancies 
 Install `pip` on your machine if you have not already done so.
 run `pip install matplotlib` For live plotting and final graph.
@@ -37,6 +49,18 @@ The program accepts the following command-line arguments to customize its behavi
 python ./main.py --seed 42 --live_plot --input_file example.csv --num_points 10
 ```
 
+### Project Governance
+
+This project was developed following a structured approach, with detailed documentation to ensure clarity and consistency throughout the process. Below are the key resources:
+
+- **Development Plan**: A comprehensive plan outlining the steps and milestones for the project's implementation.  
+  [View the Development Plan](Documentation/DevelopmentPlan.md)
+
+- **Testing Plan**: A detailed plan describing the testing strategies, test cases, and expected outcomes to ensure the program's correctness and reliability.  
+  [View the Testing Plan](Documentation/test_cases_info.md)
+
+- **Weekly Log**: An informal log documenting weekly progress, challenges, and decisions made during the development process.  
+  [View the Weekly Log](Documentation/WeeklyLogs.md)
 
 
 
